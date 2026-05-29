@@ -1,12 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Meine App</title>
-</head>
-<body>
-    <h1>Hallo iPhone!</h1>
-    <button onclick="test()">Klick mich</button>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ikigAI Prototype</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="ikigAI iPhone App Prototyp">
+      <section class="phone-shell">
+        <div class="status-bar" aria-hidden="true">
+          <span>9:41</span>
+          <span class="status-icons">5G 100%</span>
+        </div>
 
-    <script src="app.js"></script>
-</body>
+        <div id="app" class="app-root"></div>
+      </section>
+    </main>
+
+    <script defer src="./src/data.js"></script>
+    <script defer src="./src/components.js"></script>
+    <script defer src="./src/app.js"></script>
+  </body>
 </html>
