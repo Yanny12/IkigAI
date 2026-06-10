@@ -13,7 +13,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": false,
-    "end": "07:30"
+    "end": "07:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Gutes Wetter für Outdoor-Aktivität"
   },
   {
     "id": 18,
@@ -29,7 +35,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "09:00"
+    "end": "09:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 10,
+      "start": "07:20",
+      "end": "07:30",
+      "from": "outdoor",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 2,
@@ -45,7 +63,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": false,
-    "end": "10:30"
+    "end": "10:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 19,
@@ -61,7 +85,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "11:00"
+    "end": "11:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 7,
@@ -77,7 +107,19 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": false,
-    "end": "12:00"
+    "end": "12:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "10:35",
+      "end": "11:00",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 5,
@@ -93,7 +135,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "13:00"
+    "end": "13:00",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "11:45",
+      "end": "12:00",
+      "from": "office",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 11,
@@ -109,7 +163,19 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "14:30"
+    "end": "14:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "13:15",
+      "end": "13:30",
+      "from": "other",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Zuhause empfohlen: hoher Fokusbedarf",
+    "weatherRecommendation": null
   },
   {
     "id": 15,
@@ -125,7 +191,13 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": true,
-    "end": "17:00"
+    "end": "17:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 3,
@@ -141,7 +213,19 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": false,
-    "end": "18:30"
+    "end": "18:30",
+    "goalImpact": [
+      "weight"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "17:15",
+      "end": "17:30",
+      "from": "home",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Gutes Wetter für Outdoor-Aktivität"
   },
   {
     "id": 4,
@@ -157,7 +241,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": false,
-    "end": "20:00"
+    "end": "20:00",
+    "goalImpact": [
+      "family"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "18:45",
+      "end": "19:00",
+      "from": "other",
+      "to": "home"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 13,
@@ -173,7 +269,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "22:30"
+    "end": "22:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "20:15",
+      "end": "20:30",
+      "from": "home",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 6,
@@ -189,7 +297,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": false,
-    "end": "07:30"
+    "end": "07:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Gutes Wetter für Outdoor-Aktivität"
   },
   {
     "id": 33,
@@ -205,7 +319,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "08:30"
+    "end": "08:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 32,
@@ -221,7 +341,13 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "09:00"
+    "end": "09:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Zuhause empfohlen: hoher Fokusbedarf",
+    "weatherRecommendation": null
   },
   {
     "id": 29,
@@ -237,7 +363,19 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": false,
-    "end": "12:00"
+    "end": "12:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "08:35",
+      "end": "09:00",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 30,
@@ -253,7 +391,14 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": false,
-    "end": "13:30"
+    "end": "13:30",
+    "goalImpact": [
+      "family",
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 28,
@@ -269,7 +414,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "15:30"
+    "end": "15:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "13:15",
+      "end": "13:30",
+      "from": "office",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 21,
@@ -285,7 +442,13 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "17:30"
+    "end": "17:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 31,
@@ -301,7 +464,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "19:30"
+    "end": "19:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "17:15",
+      "end": "17:30",
+      "from": "other",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 9,
@@ -317,7 +492,19 @@
     "group": "Freizeit",
     "energy": "Hoch",
     "isSuggestedTime": false,
-    "end": "21:00"
+    "end": "21:00",
+    "goalImpact": [
+      "weight"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "19:15",
+      "end": "19:30",
+      "from": "office",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 10,
@@ -333,7 +520,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "07:30"
+    "end": "07:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Indoor-Alternative empfohlen wegen schlechtem Wetter"
   },
   {
     "id": 36,
@@ -349,7 +542,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "08:30"
+    "end": "08:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 34,
@@ -365,7 +564,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "11:00"
+    "end": "11:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 35,
@@ -381,7 +586,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "13:30"
+    "end": "13:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 39,
@@ -397,7 +608,13 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "14:00"
+    "end": "14:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Zuhause empfohlen: hoher Fokusbedarf",
+    "weatherRecommendation": null
   },
   {
     "id": 37,
@@ -413,7 +630,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": false,
-    "end": "15:30"
+    "end": "15:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "13:35",
+      "end": "14:00",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 40,
@@ -429,7 +658,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "16:00"
+    "end": "16:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "15:05",
+      "end": "15:30",
+      "from": "office",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 38,
@@ -445,7 +686,19 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": false,
-    "end": "17:30"
+    "end": "17:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "15:35",
+      "end": "16:00",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 60,
@@ -461,7 +714,17 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": false,
-    "end": "18:30"
+    "end": "18:30",
+    "goalImpact": [],
+    "travelBefore": {
+      "duration": 25,
+      "start": "17:35",
+      "end": "18:00",
+      "from": "office",
+      "to": "home"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 61,
@@ -477,7 +740,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "22:30"
+    "end": "22:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "20:15",
+      "end": "20:30",
+      "from": "home",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 14,
@@ -493,7 +768,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "07:30"
+    "end": "07:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Gutes Wetter für Outdoor-Aktivität"
   },
   {
     "id": 48,
@@ -509,7 +790,19 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "08:30"
+    "end": "08:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 10,
+      "start": "07:20",
+      "end": "07:30",
+      "from": "outdoor",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Zuhause empfohlen: hoher Fokusbedarf",
+    "weatherRecommendation": null
   },
   {
     "id": 42,
@@ -525,7 +818,19 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "09:00"
+    "end": "09:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "08:05",
+      "end": "08:30",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 43,
@@ -541,7 +846,13 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "09:30"
+    "end": "09:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 49,
@@ -557,7 +868,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "10:00"
+    "end": "10:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "09:05",
+      "end": "09:30",
+      "from": "office",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 41,
@@ -573,7 +896,19 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": false,
-    "end": "11:30"
+    "end": "11:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "09:35",
+      "end": "10:00",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 46,
@@ -589,7 +924,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "13:00"
+    "end": "13:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "11:05",
+      "end": "11:30",
+      "from": "office",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 44,
@@ -605,7 +952,19 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "14:00"
+    "end": "14:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "13:05",
+      "end": "13:30",
+      "from": "home",
+      "to": "office"
+    },
+    "workLocationRecommendation": "Büro/Kunde empfohlen: Abstimmung & Präsenz",
+    "weatherRecommendation": null
   },
   {
     "id": 45,
@@ -621,7 +980,14 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "16:00"
+    "end": "16:00",
+    "goalImpact": [
+      "family",
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 47,
@@ -637,7 +1003,19 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "17:30"
+    "end": "17:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": {
+      "duration": 25,
+      "start": "15:35",
+      "end": "16:00",
+      "from": "office",
+      "to": "home"
+    },
+    "workLocationRecommendation": "Büro empfohlen: gute Kollaboration",
+    "weatherRecommendation": null
   },
   {
     "id": 63,
@@ -653,7 +1031,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "19:30"
+    "end": "19:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "17:15",
+      "end": "17:30",
+      "from": "home",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 62,
@@ -669,7 +1059,13 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "21:30"
+    "end": "21:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 17,
@@ -685,7 +1081,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "07:30"
+    "end": "07:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Indoor-Alternative empfohlen wegen schlechtem Wetter"
   },
   {
     "id": 54,
@@ -701,7 +1103,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "08:30"
+    "end": "08:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 50,
@@ -717,7 +1125,13 @@
     "group": "Arbeit",
     "energy": "Hoch",
     "isSuggestedTime": true,
-    "end": "10:30"
+    "end": "10:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 51,
@@ -733,7 +1147,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "12:30"
+    "end": "12:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 52,
@@ -749,7 +1169,13 @@
     "group": "Arbeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "14:00"
+    "end": "14:00",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Zuhause empfohlen: hoher Fokusbedarf",
+    "weatherRecommendation": null
   },
   {
     "id": 53,
@@ -765,7 +1191,13 @@
     "group": "Arbeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "15:30"
+    "end": "15:30",
+    "goalImpact": [
+      "revenue"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": "Homeoffice empfohlen: Wetter & Pendelzeit sparen",
+    "weatherRecommendation": null
   },
   {
     "id": 56,
@@ -781,7 +1213,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": false,
-    "end": "17:30"
+    "end": "17:30",
+    "goalImpact": [
+      "family"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "16:45",
+      "end": "17:00",
+      "from": "home",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 20,
@@ -797,7 +1241,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": false,
-    "end": "19:00"
+    "end": "19:00",
+    "goalImpact": [
+      "family"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "17:45",
+      "end": "18:00",
+      "from": "other",
+      "to": "home"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 64,
@@ -813,7 +1269,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "21:30"
+    "end": "21:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "20:15",
+      "end": "20:30",
+      "from": "home",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 65,
@@ -829,7 +1297,13 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "23:30"
+    "end": "23:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 22,
@@ -845,7 +1319,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "09:00"
+    "end": "09:00",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": "Gutes Wetter für Outdoor-Aktivität"
   },
   {
     "id": 66,
@@ -861,7 +1341,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "14:00"
+    "end": "14:00",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "11:45",
+      "end": "12:00",
+      "from": "outdoor",
+      "to": "other"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 24,
@@ -877,7 +1369,19 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": false,
-    "end": "20:00"
+    "end": "20:00",
+    "goalImpact": [
+      "family"
+    ],
+    "travelBefore": {
+      "duration": 15,
+      "start": "17:45",
+      "end": "18:00",
+      "from": "other",
+      "to": "home"
+    },
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 57,
@@ -893,7 +1397,11 @@
     "group": "Freizeit",
     "energy": "Hoch",
     "isSuggestedTime": true,
-    "end": "13:00"
+    "end": "13:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 67,
@@ -909,7 +1417,13 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "18:30"
+    "end": "18:30",
+    "goalImpact": [
+      "stress"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 8,
@@ -925,7 +1439,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "07:30"
+    "end": "07:30",
+    "goalImpact": [
+      "weight"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 27,
@@ -941,7 +1461,11 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "09:00"
+    "end": "09:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 23,
@@ -957,7 +1481,11 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "11:00"
+    "end": "11:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 55,
@@ -973,7 +1501,11 @@
     "group": "Freizeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "12:00"
+    "end": "12:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 25,
@@ -989,7 +1521,11 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "13:00"
+    "end": "13:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 58,
@@ -1005,7 +1541,13 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "14:00"
+    "end": "14:00",
+    "goalImpact": [
+      "weight"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 59,
@@ -1021,7 +1563,11 @@
     "group": "Freizeit",
     "energy": "Tief",
     "isSuggestedTime": true,
-    "end": "15:00"
+    "end": "15:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 26,
@@ -1037,7 +1583,11 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "18:00"
+    "end": "18:00",
+    "goalImpact": [],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 12,
@@ -1053,7 +1603,14 @@
     "group": "Freizeit",
     "energy": "Mittel",
     "isSuggestedTime": true,
-    "end": "19:30"
+    "end": "19:30",
+    "goalImpact": [
+      "weight",
+      "family"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   },
   {
     "id": 16,
@@ -1069,6 +1626,12 @@
     "group": "Freizeit",
     "energy": "Niedrig",
     "isSuggestedTime": true,
-    "end": "22:00"
+    "end": "22:00",
+    "goalImpact": [
+      "family"
+    ],
+    "travelBefore": null,
+    "workLocationRecommendation": null,
+    "weatherRecommendation": null
   }
 ]
