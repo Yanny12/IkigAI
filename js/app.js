@@ -1,0 +1,243 @@
+
+const DATA_URL = './data/kalender.json';
+const START_DATE = '2026-07-06';
+
+const icons = {
+  home:`<svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V21h13V10.5"/><path d="M9.5 21v-6h5v6"/></svg>`,
+  work:`<svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M4 12h16"/></svg>`,
+  free:`<svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M6 7c3 0 6 2 6 5-3 0-6-2-6-5Z"/><path d="M18 7c-3 0-6 2-6 5 3 0 6-2 6-5Z"/></svg>`,
+  plan:`<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg>`,
+  profile:`<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c1.8-4.3 13.2-4.3 15 0"/></svg>`
+};
+
+function nav(active){
+  const items = [
+    ['index.html','home','Home'],
+    ['arbeit.html','work','Arbeit'],
+    ['freizeit.html','free','Freizeit'],
+    ['wochenplan.html','plan','Plan'],
+    ['profil.html','profile','Profil']
+  ];
+  return `<nav class="nav">${items.map(([href,key,label]) =>
+    `<a class="${active===key?'active':''}" href="${href}">${icons[key]}${label}</a>`).join('')}</nav>`;
+}
+
+function header(){
+  return `<header class="header">
+    <div class="logo">IkigAI</div>
+    <div class="header-actions">
+      <a class="icon-btn" href="profil.html" aria-label="Profil">${icons.profile}</a>
+      <a class="icon-btn" href="profil.html#settings" aria-label="Einstellungen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.05.05a2 2 0 0 1-2.83 2.83l-.05-.05A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 0 1-4 0v-.08a1.7 1.7 0 0 0-.4-1.1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.05.05a2 2 0 1 1-2.83-2.83l.05-.05A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 0 1 0-4h.08a1.7 1.7 0 0 0 1.1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.05-.05a2 2 0 1 1 2.83-2.83l.05.05A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 0 1 4 0v.08a1.7 1.7 0 0 0 .4 1.1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.05-.05a2 2 0 1 1 2.83 2.83l-.05.05A1.7 1.7 0 0 0 19.4 9c.24.37.6.6 1 .6h.6a2 2 0 0 1 0 4h-.08a1.7 1.7 0 0 0-1.1.4 1.7 1.7 0 0 0-.6 1Z"/></svg></a>
+    </div>
+  </header>`;
+}
+
+async function loadEvents(){
+  const res = await fetch(DATA_URL);
+  const data = await res.json();
+  return data.sort((a,b)=> (a.date+a.start).localeCompare(b.date+b.start));
+}
+
+function accent(e){
+  if(e.group === 'Arbeit') return '#007AFF';
+  if(e.category === 'Freiraum') return '#8E8E93';
+  if(e.category === 'Gesundheit') return '#34C759';
+  if(e.category === 'Sozial') return '#AF52DE';
+  if(e.category === 'Hund') return '#FF9500';
+  return '#34C759';
+}
+
+function groupLabel(e){
+  if(e.group === 'Arbeit') return 'Arbeit';
+  if(e.category === 'Freiraum') return 'Ruhezeit';
+  return 'Freizeit';
+}
+
+function eventCard(e){
+  const cls = e.group === 'Arbeit' ? 'work' : (e.category === 'Freiraum' ? 'rest' : 'free');
+  return `<article class="card event-card" style="--accent:${accent(e)}">
+    <div>
+      <div class="event-time">${e.start || '—'}</div>
+      <div class="event-end">${e.end || ''}</div>
+    </div>
+    <div>
+      <div class="event-title">${escapeHtml(e.title)}</div>
+      <p>${escapeHtml(e.description || '')}</p>
+      <div class="event-meta">
+        <span class="pill ${cls}">${groupLabel(e)}</span>
+        <span class="pill">${escapeHtml(e.category)}</span>
+        <span class="pill">${e.duration} Min.</span>
+        ${e.location ? `<span class="pill">${escapeHtml(e.location)}</span>` : ''}
+      </div>
+    </div>
+  </article>`;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[s]));
+}
+
+function weekdayTitle(dateStr, events){
+  const e = events.find(x => x.date === dateStr);
+  if(!e) return dateStr;
+  const d = new Date(dateStr + 'T12:00:00');
+  const formatted = d.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'numeric'});
+  return `${e.weekday}, ${formatted}`;
+}
+
+function byDate(events){
+  return events.reduce((acc,e)=>{(acc[e.date] ||= []).push(e); return acc;},{});
+}
+
+function computeStats(events){
+  const totalMin = events.reduce((s,e)=>s+(e.duration||0),0);
+  const workMin = events.filter(e=>e.group==='Arbeit').reduce((s,e)=>s+(e.duration||0),0);
+  const healthMin = events.filter(e=>e.category==='Gesundheit').reduce((s,e)=>s+(e.duration||0),0);
+  const socialMin = events.filter(e=>e.category==='Sozial').reduce((s,e)=>s+(e.duration||0),0);
+  const restMin = events.filter(e=>e.category==='Freiraum').reduce((s,e)=>s+(e.duration||0),0);
+  const freeMin = totalMin - workMin;
+  const workScore = Math.max(35, Math.min(95, Math.round(100 - Math.abs((workMin/60)-32)*2.2)));
+  const healthScore = Math.max(35, Math.min(95, Math.round(55 + (healthMin/60)*7)));
+  const socialScore = Math.max(35, Math.min(95, Math.round(55 + (socialMin/60)*7)));
+  const restScore = Math.max(30, Math.min(95, Math.round(45 + (restMin/60)*9)));
+  const balance = Math.round((workScore+healthScore+socialScore+restScore)/4);
+  return {totalMin,workMin,freeMin,healthMin,socialMin,restMin,workScore,healthScore,socialScore,restScore,balance};
+}
+
+function insights(events){
+  const s = computeStats(events);
+  const byD = byDate(events);
+  const items = [];
+  const heavyDays = Object.entries(byD).filter(([_,ev]) => ev.filter(e=>e.group==='Arbeit').reduce((a,e)=>a+e.duration,0) > 420);
+  if(heavyDays.length) items.push('Hohe Arbeitsbelastung erkannt: Plane nach langen Arbeitstagen bewusst Freiraum ein.');
+  if(s.healthMin < 180) items.push('Gesundheit ist unterrepräsentiert: Eine zusätzliche 30-Minuten-Bewegungseinheit würde den Score verbessern.');
+  if(s.restMin < 240) items.push('Erholung ist knapp: IkigAI empfiehlt zwei zusätzliche Ruheblöcke in der Woche.');
+  items.push('Deep Work wird bevorzugt am Vormittag vorgeschlagen, bevor soziale und private Termine starten.');
+  items.push('Outdoor-Aktivitäten werden in V1 wetterbewusst simuliert: Bei Regen würde Joggen automatisch ersetzt oder verschoben.');
+  return items;
+}
+
+
+async function renderHome(){
+  document.querySelector('#app').insertAdjacentHTML('afterbegin', header());
+  document.querySelector('#app').insertAdjacentHTML('beforeend', nav('home'));
+  const events = await loadEvents();
+  const dayEvents = events.filter(e => e.date === START_DATE);
+  const content = document.querySelector('#content');
+  content.innerHTML = `
+    <div class="hero-date">Prototyp-Tag</div>
+    <h1>${weekdayTitle(START_DATE, events)}</h1>
+    <div class="quick-actions">
+      <a class="primary-tile" href="arbeit.html"><span>💼</span><b>Arbeit</b></a>
+      <a class="primary-tile" href="freizeit.html"><span>🌿</span><b>Freizeit</b></a>
+      <a class="primary-tile" href="wochenplan.html"><span>✨</span><b>Wochenplan</b></a>
+    </div>
+    <div class="section-head"><h2>Heute</h2><a class="small-link" href="wochenplan.html">Alle ansehen</a></div>
+    ${dayEvents.length ? dayEvents.map(eventCard).join('') : '<div class="card empty">Keine Termine für diesen Tag.</div>'}
+  `;
+}
+
+async function renderList(kind){
+  document.querySelector('#app').insertAdjacentHTML('afterbegin', header());
+  document.querySelector('#app').insertAdjacentHTML('beforeend', nav(kind === 'Arbeit' ? 'work' : 'free'));
+  const events = await loadEvents();
+  const filtered = kind === 'Arbeit'
+    ? events.filter(e => e.group === 'Arbeit')
+    : events.filter(e => e.group === 'Freizeit');
+  const grouped = byDate(filtered);
+  document.querySelector('#content').innerHTML = `
+    <h1>${kind}</h1>
+    <p>${filtered.length} Termine aus der JSON-Datei</p>
+    ${Object.keys(grouped).sort().map(date => `
+      <div class="day-block">
+        <div class="day-title">${weekdayTitle(date, events)}</div>
+        ${grouped[date].map(eventCard).join('')}
+      </div>`).join('')}
+  `;
+}
+
+async function renderPlan(){
+  document.querySelector('#app').insertAdjacentHTML('afterbegin', header());
+  document.querySelector('#app').insertAdjacentHTML('beforeend', nav('plan'));
+  const events = await loadEvents();
+  const stats = computeStats(events);
+  const grouped = byDate(events);
+  const insightCards = insights(events).map(t => `<div class="card insight"><div class="check">✓</div><p>${escapeHtml(t)}</p></div>`).join('');
+  document.querySelector('#content').innerHTML = `
+    <h1>KI-Wochenplan</h1>
+    <div class="score-card">
+      <p style="color:rgba(255,255,255,.82)">IkigAI Balance Score</p>
+      <div class="score-number">${stats.balance}<span style="font-size:22px">/100</span></div>
+      <div class="score-grid">
+        <div class="metric"><b>${stats.workScore}%</b><span>Arbeit</span></div>
+        <div class="metric"><b>${stats.healthScore}%</b><span>Gesundheit</span></div>
+        <div class="metric"><b>${stats.socialScore}%</b><span>Sozialleben</span></div>
+        <div class="metric"><b>${stats.restScore}%</b><span>Erholung</span></div>
+      </div>
+    </div>
+    <h2>KI Insights</h2>
+    ${insightCards}
+    <h2>Optimierter Wochenplan</h2>
+    ${Object.keys(grouped).sort().map(date => `
+      <div class="day-block">
+        <div class="day-title">${weekdayTitle(date, events)}</div>
+        ${recommendedBlock(date, grouped[date])}
+        ${grouped[date].map(eventCard).join('')}
+      </div>`).join('')}
+  `;
+}
+
+function recommendedBlock(date, events){
+  const workMin = events.filter(e=>e.group==='Arbeit').reduce((a,e)=>a+e.duration,0);
+  if(workMin < 360){
+    return `<article class="card event-card" style="--accent:#007AFF">
+      <div><div class="event-time">09:00</div><div class="event-end">11:00</div></div>
+      <div><div class="event-title">Empfohlene Fokusarbeit</div><p>KI-Vorschlag: ruhiger Deep-Work-Block im Homeoffice.</p>
+      <div class="event-meta"><span class="pill work">KI-Vorschlag</span><span class="pill">Homeoffice</span><span class="pill">120 Min.</span></div></div>
+    </article>`;
+  }
+  return `<article class="card event-card" style="--accent:#8E8E93">
+      <div><div class="event-time">18:30</div><div class="event-end">19:00</div></div>
+      <div><div class="event-title">Empfohlene Ruhezeit</div><p>KI-Vorschlag: kurze Regeneration nach einem intensiven Arbeitstag.</p>
+      <div class="event-meta"><span class="pill rest">KI-Vorschlag</span><span class="pill">Ruhezeit</span><span class="pill">30 Min.</span></div></div>
+    </article>`;
+}
+
+function renderProfile(){
+  document.querySelector('#app').insertAdjacentHTML('afterbegin', header());
+  document.querySelector('#app').insertAdjacentHTML('beforeend', nav('profile'));
+  const goals = JSON.parse(localStorage.getItem('ikigai_goals') || '["5 kg abnehmen","Stress reduzieren","Mehr Zeit mit Familie"]');
+  document.querySelector('#content').innerHTML = `
+    <h1>Profil</h1>
+    <div class="card form-card">
+      <h3>Ziele</h3>
+      <div id="goals">${goals.map(g=>`<div class="list-row"><span>${escapeHtml(g)}</span><span>›</span></div>`).join('')}</div>
+      <input id="goalInput" placeholder="Neues Ziel eingeben">
+      <button class="add-btn" onclick="addGoal()">+ Ziel hinzufügen</button>
+    </div>
+    <div class="card">
+      <h3>Aktivitäten</h3>
+      <div class="list-row"><span>Joggen → 5 kg abnehmen</span></div>
+      <div class="list-row"><span>Padel → Fitness</span></div>
+      <div class="list-row"><span>Familienabend → Familienzeit</span></div>
+    </div>
+    <div class="card">
+      <h3>Arbeitsorte</h3>
+      ${['Zuhause','Büro','Coworking','Café'].map(x=>`<div class="list-row"><span>${x}</span><span>✓</span></div>`).join('')}
+    </div>
+    <div class="card" id="settings">
+      <h3>Kalenderintegration</h3>
+      ${['Apple Calendar','Google Calendar','Outlook'].map(x=>`<div class="list-row"><span>${x}</span><button class="status-btn">Verbinden</button></div>`).join('')}
+    </div>
+  `;
+}
+
+function addGoal(){
+  const input = document.getElementById('goalInput');
+  const val = input.value.trim();
+  if(!val) return;
+  const goals = JSON.parse(localStorage.getItem('ikigai_goals') || '[]');
+  goals.push(val);
+  localStorage.setItem('ikigai_goals', JSON.stringify(goals));
+  renderProfile();
+}
