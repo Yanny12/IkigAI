@@ -1,0 +1,672 @@
+[
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "07:00",
+    "title": "Morgenrunde Hund",
+    "duration": 30,
+    "location": "Draussen",
+    "category": "Hund",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "09:00:00",
+    "title": "Teammeeting",
+    "duration": 90,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "17:30",
+    "title": "Physio Knie",
+    "duration": 60,
+    "location": "Physiotherapie",
+    "category": "Gesundheit",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "19:00",
+    "title": "Gemeinsames Abendessen",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Sozial",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 60,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "07:00",
+    "title": "Morgenrunde Hund",
+    "duration": 30,
+    "location": "Zuhause",
+    "category": "Hund",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "11:00:00",
+    "title": "Rapport Vorgesetzter",
+    "duration": 60,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Reha Training",
+    "duration": 30,
+    "location": "Zuhause",
+    "category": "Gesundheit",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "19:30",
+    "title": "Padel Training",
+    "duration": 90,
+    "location": "Padelhalle",
+    "category": "Hobby",
+    "group": "Hobby"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Morgenrunde Hund",
+    "duration": 30,
+    "location": "Zuhause",
+    "category": "Hund",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "",
+    "title": "Fokuszeit ",
+    "duration": 60,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Padel Verein",
+    "duration": 60,
+    "location": "Büro;Zuhause",
+    "category": "Sozial",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Morgenrunde Hund",
+    "duration": 30,
+    "location": "Draussen",
+    "category": "Hund",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "",
+    "title": "Projektarbeit X",
+    "duration": 120,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Paarzeit",
+    "duration": 120,
+    "location": "Büro;Zuhause",
+    "category": "Sozial",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Morgenrunde Hund",
+    "duration": 30,
+    "location": "Büro;Zuhause",
+    "category": "Hund",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "",
+    "title": "Planung",
+    "duration": 90,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-06",
+    "weekday": "Montag",
+    "time": "",
+    "title": "Tägliche Aufgaben",
+    "duration": 30,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "18:00",
+    "title": "Gemeinsames Abendessen",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Sozial",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 60,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-11",
+    "weekday": "Samstag",
+    "time": "",
+    "title": "Langer Spaziergang",
+    "duration": 120,
+    "location": "Draussen",
+    "category": "Hund",
+    "group": "Freizeit"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Motorrad fahren",
+    "duration": 120,
+    "location": "Zuhause",
+    "category": "Hobby",
+    "group": "Hobby"
+  },
+  {
+    "date": "2026-07-11",
+    "weekday": "Samstag",
+    "time": "18:00",
+    "title": "Paarzeit",
+    "duration": 120,
+    "location": "Zuhause",
+    "category": "Sozial",
+    "group": "Freizeit"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Wohnung reinigen",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Haushalt",
+    "group": "Haushalt"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Wocheneinkauf",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Haushalt",
+    "group": "Haushalt"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Weiterbildung Tiefbau",
+    "duration": 90,
+    "location": "Zuhause",
+    "category": "Weiterbildung",
+    "group": "Weiterbildung"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "09:00:00",
+    "title": "Kunden Termin",
+    "duration": 180,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "12:00:00",
+    "title": "Mittagessen mit Kunden",
+    "duration": 90,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "",
+    "title": "Nacharbeit Termin",
+    "duration": 120,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "",
+    "title": "Fokuszeit ",
+    "duration": 30,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-07",
+    "weekday": "Dienstag",
+    "time": "",
+    "title": "Tägliche Aufgaben",
+    "duration": 60,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Projektarbeit X",
+    "duration": 150,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Projektarbeit Y",
+    "duration": 150,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Tägliche Aufgaben",
+    "duration": 60,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "14:00:00",
+    "title": "Projektmeeting X",
+    "duration": 90,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "16:00:00",
+    "title": "Projektmeeting Y",
+    "duration": 90,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Fokuszeit ",
+    "duration": 30,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Telefonat mit Vorgesetzem",
+    "duration": 30,
+    "location": "Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "10:00:00",
+    "title": "Projektmeeting Y",
+    "duration": 90,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Mitarbeiter Meeting X",
+    "duration": 30,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Mitarbeiter Meeting Y",
+    "duration": 30,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Mitarbeiter Meeting Z",
+    "duration": 30,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Mitagessen Team",
+    "duration": 60,
+    "location": "Büro",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Projektarbeit Y",
+    "duration": 90,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Projektarbeit Y",
+    "duration": 90,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Fokuszeit ",
+    "duration": 60,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Telefonat mit Kunden",
+    "duration": 30,
+    "location": "Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Projektarbeit X",
+    "duration": 120,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Projektarbeit Y",
+    "duration": 120,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Fokuszeit ",
+    "duration": 30,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Tägliche Aufgaben",
+    "duration": 30,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Projektarbeit Y",
+    "duration": 60,
+    "location": "Büro;Zuhause",
+    "category": "Arbeit",
+    "group": "Arbeit"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Französisch lernen",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Weiterbildung",
+    "group": "Weiterbildung"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "17:00:00",
+    "title": "Bier um 4",
+    "duration": 0,
+    "location": "Bar",
+    "category": "Sozial",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-12",
+    "weekday": "Sonntag",
+    "time": "",
+    "title": "Wanderung",
+    "duration": 240,
+    "location": "Bergen",
+    "category": "Hobby",
+    "group": "Hobby"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Joggen",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Hobby",
+    "group": "Hobby"
+  },
+  {
+    "date": "NaT",
+    "weekday": "nan",
+    "time": "",
+    "title": "Technickzeit",
+    "duration": 60,
+    "location": "Zuhause",
+    "category": "Hobby",
+    "group": "Hobby"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "18:00:00",
+    "title": "Hemden bügeln",
+    "duration": 30,
+    "location": "Zuhause",
+    "category": "Haushalt",
+    "group": "Haushalt"
+  },
+  {
+    "date": "2026-07-08",
+    "weekday": "Mittwoch",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 60,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-09",
+    "weekday": "Donnerstag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 60,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-10",
+    "weekday": "Freitag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-11",
+    "weekday": "Samstag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  },
+  {
+    "date": "2026-07-12",
+    "weekday": "Sonntag",
+    "time": "",
+    "title": "Freiraum",
+    "duration": 120,
+    "location": "",
+    "category": "Freiraum",
+    "group": "Freizeit"
+  }
+]
