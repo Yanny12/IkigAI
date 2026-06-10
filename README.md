@@ -20,3 +20,8 @@ GitHub Pages:
 - Neue Termine werden lokal im Browser gespeichert (`localStorage`)
 - Startzeit ist optional
 - Ohne Startzeit vergibt IkigAI automatisch einen KI-Zeitvorschlag
+
+
+## Fix in V1.3.1
+- Der Button `Neuer Termin` ist jetzt zusätzlich als große blaue Karte direkt im Inhalt sichtbar.
+- Der Floating Button wurde nach rechts unten fixiert.
