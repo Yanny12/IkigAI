@@ -12,3 +12,11 @@ GitHub Pages:
 1. ZIP entpacken
 2. Inhalt in Repository hochladen
 3. Settings > Pages > Deploy from branch > main / root
+
+
+## Neu in V1.3
+- Neuer-Termin-Button auf Home, Arbeit und Freizeit
+- iOS Bottom-Sheet Formular
+- Neue Termine werden lokal im Browser gespeichert (`localStorage`)
+- Startzeit ist optional
+- Ohne Startzeit vergibt IkigAI automatisch einen KI-Zeitvorschlag
