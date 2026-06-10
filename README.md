@@ -1,17 +1,14 @@
-# IkigAI Data-Driven Visual V1
+# IkigAI Data Driven V1.1
 
-Diese Version ist GitHub-Pages-kompatibel und nutzt `data/kalender.json` dynamisch.
+Neu in dieser Version:
+- Termine ohne konkrete Uhrzeit erhalten automatisch eine vorgeschlagene Zeit.
+- Vorgeschlagene Zeiten werden mit dem Badge `vorgeschlagene Zeit` markiert.
+- Keine Termine in `kalender.json` haben leere Startzeiten.
 
-## Start
+Exportierte Termine: 67
+Automatisch vorgeschlagene Zeiten: 51
+
+Upload zu GitHub Pages:
 1. ZIP entpacken.
-2. Inhalt in ein GitHub Repository hochladen.
-3. GitHub Pages aktivieren.
-4. `index.html` öffnen.
-
-## Enthalten
-- Home mit Montag, 06.07.2026 aus JSON
-- Arbeit/Freizeit Filter aus JSON
-- Wochenplan mit automatisch berechnetem IkigAI Score
-- Regelbasierte KI Insights
-- Profilseite mit localStorage-Zielen
-- iPhone-optimiertes Apple-inspiriertes UI
+2. Alle Dateien und Ordner ins Repository hochladen.
+3. GitHub Pages auf Branch `main` und Ordner `/root` aktivieren.
