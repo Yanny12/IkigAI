@@ -5,28 +5,28 @@
     "category": "Privat",
     "startDate": "2026-07-01",
     "targetDate": "2026-08-01",
-    "current": 0.8,
+    "current": 0.6,
     "target": 2,
     "unit": "kg"
   },
   {
     "id": "g2",
-    "title": "Mehr Fokuszeit schaffen",
-    "category": "Arbeit",
-    "startDate": "2026-07-01",
-    "targetDate": "2026-07-31",
-    "current": 6,
-    "target": 10,
-    "unit": "Stunden"
+    "title": "3x pro Woche Sport",
+    "category": "Privat",
+    "startDate": "2026-07-06",
+    "targetDate": "2026-07-12",
+    "current": 2,
+    "target": 3,
+    "unit": "Einheiten"
   },
   {
     "id": "g3",
-    "title": "Regelmässig erholen",
-    "category": "Privat",
-    "startDate": "2026-07-01",
-    "targetDate": "2026-07-31",
-    "current": 3,
-    "target": 6,
-    "unit": "Ruheblöcke"
+    "title": "20 Stunden Fokusarbeit",
+    "category": "Arbeit",
+    "startDate": "2026-07-06",
+    "targetDate": "2026-07-12",
+    "current": 7,
+    "target": 20,
+    "unit": "Stunden"
   }
 ]

@@ -1,8 +1,8 @@
-# IkigAI V3.0 Calendar UI
+# IkigAI V3.2 Realistic Week
 
-- Home: 5-Stunden-Timeline mit Jetzt-Linie
-- Kategorien: Arbeit (blau), Privat (orange)
-- Footer: Home, Arbeit, Privat, Woche, Ziele
-- Score und Prioritäten entfernt
-- Ziele mit Zeitraum und Fortschritt
-- Konflikte: ein Vorschlag oder manuelle Wahl
+Neue Datenbasis:
+- realistischere Woche mit 21 Terminen statt sehr voller Demo
+- ca. 18.5h Arbeitstermine + gezielte Fokusblöcke
+- private Termine, Sport und Erholung ausgewogen verteilt
+- bewusst freie Zeit sichtbar
+- nur Kategorien Arbeit und Privat
