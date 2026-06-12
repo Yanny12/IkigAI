@@ -1,63 +1,32 @@
 [
   {
-    "id": "weight",
-    "title": "5 kg abnehmen",
-    "target": 5,
-    "unit": "Aktivitäten/Woche",
-    "categories": [
-      "Gesundheit"
-    ],
-    "keywords": [
-      "joggen",
-      "padel",
-      "sport",
-      "fitness",
-      "training"
-    ]
+    "id": "g1",
+    "title": "2 kg abnehmen",
+    "category": "Privat",
+    "startDate": "2026-07-01",
+    "targetDate": "2026-08-01",
+    "current": 0.8,
+    "target": 2,
+    "unit": "kg"
   },
   {
-    "id": "stress",
-    "title": "Stress reduzieren",
-    "target": 4,
-    "unit": "Ruheblöcke/Woche",
-    "categories": [
-      "Freiraum"
-    ],
-    "keywords": [
-      "pause",
-      "ruhe",
-      "freiraum",
-      "spaziergang"
-    ]
+    "id": "g2",
+    "title": "Mehr Fokuszeit schaffen",
+    "category": "Arbeit",
+    "startDate": "2026-07-01",
+    "targetDate": "2026-07-31",
+    "current": 6,
+    "target": 10,
+    "unit": "Stunden"
   },
   {
-    "id": "family",
-    "title": "Mehr Zeit mit Familie & Freunden",
-    "target": 3,
-    "unit": "soziale Termine/Woche",
-    "categories": [
-      "Sozial"
-    ],
-    "keywords": [
-      "familie",
-      "freunde",
-      "essen",
-      "sozial"
-    ]
-  },
-  {
-    "id": "revenue",
-    "title": "Umsatz steigern",
-    "target": 20,
-    "unit": "Arbeitsstunden/Woche",
-    "categories": [
-      "Arbeit"
-    ],
-    "keywords": [
-      "kunden",
-      "fokus",
-      "meeting",
-      "arbeit"
-    ]
+    "id": "g3",
+    "title": "Regelmässig erholen",
+    "category": "Privat",
+    "startDate": "2026-07-01",
+    "targetDate": "2026-07-31",
+    "current": 3,
+    "target": 6,
+    "unit": "Ruheblöcke"
   }
 ]
