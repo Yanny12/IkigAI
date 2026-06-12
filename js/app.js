@@ -124,17 +124,14 @@ function openEventModal(defaultCategory='Arbeit'){
   const overlay=document.createElement('div'); overlay.className='modal-overlay'; overlay.id='eventModal';
   overlay.innerHTML=`<div class="bottom-sheet"><div class="sheet-handle"></div><h2>Neuer Termin</h2>
     <label>Titel</label><input id="newTitle" placeholder="z.B. Kundenmeeting">
-    <label>Kategorie *</label><select id="newCategory">
-      <option value="">Bitte Kategorie wählen</option>
-      ${['Arbeit','Gesundheit','Sozial','Freiraum'].map(c=>`<option value="${c}">${c}</option>`).join('')}
-    </select>
-    <label>Datum *</label><input id="newDate" type="date" value="${START_DATE}">
+    <label>Datum</label><input id="newDate" type="date" value="${START_DATE}">
     <label>Startzeit optional</label><input id="newStart" type="time">
-    <label>Dauer in Minuten *</label><input id="newDuration" type="number" value="60" min="15" step="15">
+    <label>Dauer in Minuten</label><input id="newDuration" type="number" value="60" min="15" step="15">
     <label>Ort</label><input id="newLocation" placeholder="z.B. Büro, Zuhause, Draussen">
+    <label>Kategorie</label><select id="newCategory">${['Arbeit','Gesundheit','Sozial','Freiraum'].map(c=>`<option ${c===defaultCategory?'selected':''}>${c}</option>`).join('')}</select>
     <div id="conflictArea"></div>
     <div class="sheet-actions"><button class="secondary-btn" onclick="closeEventModal()">Abbrechen</button><button class="add-btn" onclick="saveNewEvent(false)">Speichern</button></div>
-    <p class="sheet-note">Titel, Kategorie und Dauer sind Pflichtfelder. Ohne Startzeit vergibt IkigAI einen Zeitvorschlag anhand deiner Kategorie-Prioritäten.</p></div>`;
+    <p class="sheet-note">Ohne Startzeit vergibt IkigAI einen Zeitvorschlag anhand deiner Kategorie-Prioritäten.</p></div>`;
   document.body.appendChild(overlay);
 }
 function closeEventModal(){document.getElementById('eventModal')?.remove()}
@@ -205,12 +202,10 @@ function deleteEvent(id){
 
 async function saveNewEvent(ignoreConflict=false){
   const title=document.getElementById('newTitle').value.trim();
-  const category=document.getElementById('newCategory').value;
-  const duration=Number(document.getElementById('newDuration').value||0);
   if(!title){alert('Bitte Titel eingeben.');return}
-  if(!category){alert('Bitte eine Kategorie auswählen.');return}
-  if(!duration || duration <= 0){alert('Bitte eine gültige Dauer eingeben.');return}
   const date=document.getElementById('newDate').value;
+  const category=document.getElementById('newCategory').value;
+  const duration=Number(document.getElementById('newDuration').value||60);
   let start=document.getElementById('newStart').value;
   const suggested=!start;
   if(!start) start=suggestedTimeFor(category);
