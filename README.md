@@ -36,9 +36,7 @@ GitHub Pages:
 - Speicherung im Browser via `localStorage`
 
 
-## Neu in V1.5
-- Kategorien im Profil priorisieren
-- Prioritäten beeinflussen KI-Zeitvorschläge
-- Konfliktprüfung beim Erfassen neuer Termine
-- Warnung bei Überschneidungen
-- Optionen: Zeit anpassen oder trotzdem speichern
+## Fix in V1.5.1
+- Blank-Screen-Risiko reduziert
+- App zeigt bei Ladefehlern eine sichtbare Fehlermeldung
+- Kategorienprioritäten und Konfliktprüfung sauber integriert
