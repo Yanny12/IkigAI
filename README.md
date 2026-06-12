@@ -55,3 +55,4 @@ GitHub Pages:
 - Excel-Basistermine werden als lokale Kopie überschrieben
 - Konfliktprüfung auch beim Bearbeiten
 - Kategorie-Prioritäten müssen eindeutig sein
+V1.7.1 syntax fix

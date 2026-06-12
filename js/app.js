@@ -184,7 +184,7 @@ async function saveEditedEvent(id, ignoreConflict=false){
   conflictBaseEvents=baseEvents.filter(e=>String(e.id)!==String(id));
   const conflict=hasConflict(updated,compare);
   if(conflict && !ignoreConflict){
-    document.getElementById('conflictArea').innerHTML=conflictWarning(updated,conflict).replace('saveNewEvent(true)','saveEditedEvent(\\''+id+'\\', true)');
+    document.getElementById('conflictArea').innerHTML=conflictWarning(updated,conflict).replace('saveNewEvent(true)', `saveEditedEvent('${id}', true)`);
     return;
   }
   let newLocals=locals.filter(e=>String(e.id)!==String(id) && String(e.originalId)!==String(id));
