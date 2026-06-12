@@ -56,3 +56,10 @@ GitHub Pages:
 - Konfliktprüfung auch beim Bearbeiten
 - Kategorie-Prioritäten müssen eindeutig sein
 V1.7.1 syntax fix
+
+
+## Neu in V1.8
+- Kategorie beim neuen Termin ist initial leer
+- Kategorie ist Pflichtfeld
+- Titel, Kategorie und Dauer werden validiert
+- Kategorie steht im Formular direkt unter dem Titel
