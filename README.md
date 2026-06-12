@@ -47,3 +47,11 @@ GitHub Pages:
 - Bestehende Hund-Termine werden als `Freizeit` geführt
 - Konfliktwarnung zeigt Priorität des neuen und bestehenden Termins
 - IkigAI gibt eine Empfehlung anhand der Prioritäten
+
+
+## Neu in V1.7
+- Termine können angetippt und bearbeitet werden
+- Bearbeiten, Löschen und Speichern im lokalen Browser-Speicher
+- Excel-Basistermine werden als lokale Kopie überschrieben
+- Konfliktprüfung auch beim Bearbeiten
+- Kategorie-Prioritäten müssen eindeutig sein

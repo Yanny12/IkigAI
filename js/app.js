@@ -17,7 +17,13 @@ function safeJSON(key, fallback){try{return JSON.parse(localStorage.getItem(key)
 async function loadJSON(url){const r=await fetch(url); if(!r.ok) throw new Error(url+' konnte nicht geladen werden'); return r.json()}
 function localEvents(){return safeJSON('ikigai_events',[])}
 function saveLocalEvents(events){localStorage.setItem('ikigai_events',JSON.stringify(events))}
-async function loadEvents(){const base=await loadJSON(DATA_URL); return [...base,...localEvents()].sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))}
+async function loadEvents(){
+  const base=await loadJSON(DATA_URL);
+  const locals=localEvents();
+  const deleted=new Set(locals.filter(e=>e.deleted).map(e=>String(e.originalId)));
+  const edited=new Set(locals.filter(e=>e.originalId && !e.deleted).map(e=>String(e.originalId)));
+  return [...base.filter(e=>!deleted.has(String(e.id)) && !edited.has(String(e.id))),...locals.filter(e=>!e.deleted)].sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))
+}
 function defaultProfile(){return {firstName:'',lastName:'',email:'',phone:'',age:'',gender:'',privateAddress:'',businessAddress:'',weeklyHours:40,workDays:['Montag','Dienstag','Mittwoch','Donnerstag','Freitag'],categoryPriorities:{Arbeit:5,Gesundheit:4,Sozial:3,Freiraum:4}}}
 function loadProfile(){const p={...defaultProfile(),...safeJSON('ikigai_profile',{})}; p.categoryPriorities={...defaultProfile().categoryPriorities,...(p.categoryPriorities||{})}; p.workDays=p.workDays||defaultProfile().workDays; return p}
 function saveProfile(){
@@ -37,8 +43,16 @@ function saveProfile(){
 }
 function saveCategoryPriorities(){
   const profile=loadProfile();
-  ['Arbeit','Gesundheit','Sozial','Freiraum'].forEach(c=>profile.categoryPriorities[c]=Number(document.getElementById('priority'+c).value));
+  const cats=['Arbeit','Gesundheit','Sozial','Freiraum'];
+  const values=cats.map(c=>Number(document.getElementById('priority'+c).value));
+  if(new Set(values).size !== values.length){
+    const note=document.getElementById('prioritySavedNote');
+    if(note){note.textContent='Jede Priorität darf nur einmal vorkommen.'; note.style.color='#FF3B30'}
+    return;
+  }
+  cats.forEach(c=>profile.categoryPriorities[c]=Number(document.getElementById('priority'+c).value));
   localStorage.setItem('ikigai_profile',JSON.stringify(profile));
+  const note=document.getElementById('prioritySavedNote'); if(note) note.style.color='#34C759';
   flash('prioritySavedNote');
 }
 function flash(id){const el=document.getElementById(id); if(el){el.textContent='Gespeichert'; setTimeout(()=>el.textContent='',1600)}}
@@ -121,6 +135,71 @@ function openEventModal(defaultCategory='Arbeit'){
   document.body.appendChild(overlay);
 }
 function closeEventModal(){document.getElementById('eventModal')?.remove()}
+async function openEditEventModal(id){
+  const events=await loadEvents();
+  const event=events.find(e=>String(e.id)===String(id));
+  if(!event) return;
+  const overlay=document.createElement('div'); overlay.className='modal-overlay'; overlay.id='eventModal';
+  overlay.innerHTML=`<div class="bottom-sheet"><div class="sheet-handle"></div><h2>Termin anpassen</h2>
+    <label>Titel</label><input id="editTitle" value="${esc(event.title)}">
+    <label>Datum</label><input id="editDate" type="date" value="${event.date}">
+    <label>Startzeit</label><input id="editStart" type="time" value="${event.start}">
+    <label>Dauer in Minuten</label><input id="editDuration" type="number" value="${event.duration}" min="15" step="15">
+    <label>Ort</label><input id="editLocation" value="${esc(event.location||'')}">
+    <label>Kategorie</label><select id="editCategory">${['Arbeit','Gesundheit','Sozial','Freiraum'].map(c=>`<option ${c===event.category?'selected':''}>${c}</option>`).join('')}</select>
+    <div id="conflictArea"></div>
+    <div class="sheet-actions three"><button class="secondary-btn" onclick="closeEventModal()">Abbrechen</button><button class="danger-btn" onclick="deleteEvent('${event.id}')">Löschen</button><button class="add-btn" onclick="saveEditedEvent('${event.id}', false)">Speichern</button></div>
+    <p class="sheet-note">Excel-Basistermine werden beim Bearbeiten als lokale Kopie gespeichert. Die Original-JSON bleibt unverändert.</p></div>`;
+  document.body.appendChild(overlay);
+}
+async function saveEditedEvent(id, ignoreConflict=false){
+  const baseEvents=await loadJSON(DATA_URL);
+  const locals=localEvents();
+  const all=[...baseEvents,...locals];
+  const original=all.find(e=>String(e.id)===String(id));
+  if(!original) return;
+  const category=document.getElementById('editCategory').value;
+  const duration=Number(document.getElementById('editDuration').value||60);
+  const start=document.getElementById('editStart').value || suggestedTimeFor(category);
+  const date=document.getElementById('editDate').value;
+  const updated={...original,
+    id:String(id).startsWith('local-')?id:'edited-'+id,
+    originalId:String(id).startsWith('edited-')?original.originalId:(String(id).startsWith('local-')?null:id),
+    date,
+    weekday:new Date(date+'T12:00').toLocaleDateString('de-CH',{weekday:'long'}),
+    start,end:endTime(start,duration),
+    title:document.getElementById('editTitle').value.trim(),
+    duration,
+    location:document.getElementById('editLocation').value.trim(),
+    category,
+    group:category==='Arbeit'?'Arbeit':'Freizeit',
+    priority:String(priorityFor(category)),
+    description:original.description || 'Manuell angepasst',
+    timeWasSuggested:false,
+    edited:true,
+    conflictIgnored:ignoreConflict
+  };
+  if(!updated.title){alert('Bitte Titel eingeben.');return}
+  const compare=all.filter(e=>String(e.id)!==String(id) && String(e.originalId)!==String(id));
+  conflictBaseEvents=baseEvents.filter(e=>String(e.id)!==String(id));
+  const conflict=hasConflict(updated,compare);
+  if(conflict && !ignoreConflict){
+    document.getElementById('conflictArea').innerHTML=conflictWarning(updated,conflict).replace('saveNewEvent(true)','saveEditedEvent(\\''+id+'\\', true)');
+    return;
+  }
+  let newLocals=locals.filter(e=>String(e.id)!==String(id) && String(e.originalId)!==String(id));
+  newLocals.push(updated);
+  saveLocalEvents(newLocals);
+  closeEventModal(); location.reload();
+}
+function deleteEvent(id){
+  const locals=localEvents();
+  const baseDeleted=String(id).startsWith('local-') || String(id).startsWith('edited-') ? [] : [{id:'deleted-'+id, originalId:id, deleted:true, date:'9999-12-31', start:'23:59', end:'23:59', title:'', duration:0, category:'Freiraum', group:'Freizeit'}];
+  const newLocals=locals.filter(e=>String(e.id)!==String(id) && String(e.originalId)!==String(id)).concat(baseDeleted);
+  saveLocalEvents(newLocals);
+  closeEventModal(); location.reload();
+}
+
 async function saveNewEvent(ignoreConflict=false){
   const title=document.getElementById('newTitle').value.trim();
   if(!title){alert('Bitte Titel eingeben.');return}
@@ -139,7 +218,14 @@ async function saveNewEvent(ignoreConflict=false){
 
 function accent(e){if(e.group==='Arbeit')return'#007AFF';if(e.category==='Freiraum')return'#8E8E93';if(e.category==='Gesundheit')return'#34C759';if(e.category==='Sozial')return'#AF52DE';if(e.category==='Hund')return'#FF9500';return'#34C759'}
 function groupLabel(e){if(e.group==='Arbeit')return'Arbeit';if(e.category==='Freiraum')return'Ruhezeit';return'Freizeit'}
-function eventCard(e){const cls=e.group==='Arbeit'?'work':(e.category==='Freiraum'?'rest':'free'); return `<article class="card event-card" style="--accent:${accent(e)}"><div><div class="event-time">${esc(e.start)}</div><div class="event-end">${esc(e.end||'')}</div></div><div><div class="event-title">${esc(e.title)}</div><p>${esc(e.description)}</p><div class="event-meta"><span class="pill ${cls}">${groupLabel(e)}</span><span class="pill">${esc(e.category)}</span><span class="pill">${e.duration} Min.</span><span class="pill ai">Priorität ${priorityFor(e.category)}</span>${e.location?`<span class="pill">${esc(e.location)}</span>`:''}${e.timeWasSuggested?`<span class="pill ai">KI-Zeitvorschlag</span>`:''}${e.workLocationRecommendation?`<span class="pill location">${esc(e.workLocationRecommendation)}</span>`:''}${e.weatherRecommendation?`<span class="pill weather">${esc(e.weatherRecommendation)}</span>`:''}${e.goalImpact?.length?`<span class="pill free">Zielbeitrag</span>`:''}${e.conflictIgnored?`<span class="pill ai">Konflikt ignoriert</span>`:''}</div></div></article>`}
+function eventCard(e){
+  const cls=e.group==='Arbeit'?'work':(e.category==='Freiraum'?'rest':'free');
+  return `<article class="card event-card editable-event" onclick="openEditEventModal('${e.id}')" style="--accent:${accent(e)}">
+    <div><div class="event-time">${esc(e.start)}</div><div class="event-end">${esc(e.end||'')}</div></div>
+    <div><div class="event-title">${esc(e.title)}</div><p>${esc(e.description)}</p>
+    <div class="event-meta"><span class="pill ${cls}">${groupLabel(e)}</span><span class="pill">${esc(e.category)}</span><span class="pill">${e.duration} Min.</span><span class="pill ai">Priorität ${priorityFor(e.category)}</span>${e.location?`<span class="pill">${esc(e.location)}</span>`:''}${e.timeWasSuggested?`<span class="pill ai">KI-Zeitvorschlag</span>`:''}${e.workLocationRecommendation?`<span class="pill location">${esc(e.workLocationRecommendation)}</span>`:''}${e.weatherRecommendation?`<span class="pill weather">${esc(e.weatherRecommendation)}</span>`:''}${e.goalImpact?.length?`<span class="pill free">Zielbeitrag</span>`:''}${e.conflictIgnored?`<span class="pill ai">Konflikt ignoriert</span>`:''}<span class="pill edit-pill">Antippen zum Bearbeiten</span></div></div>
+  </article>`
+}
 function travelCard(t){if(!t)return''; return `<article class="card travel-card"><div><div class="event-time">${t.start}</div><div class="event-end">${t.end}</div></div><div><div class="event-title">Reisezeit</div><p>Automatisch eingeplant zwischen unterschiedlichen Orten.</p><div class="event-meta"><span class="pill rest">${t.duration} Min.</span><span class="pill">Puffer</span></div></div></article>`}
 function eventWithTravel(e){return travelCard(e.travelBefore)+eventCard(e)}
 function byDate(events){return events.reduce((a,e)=>{(a[e.date]??=[]).push(e);return a},{})}
@@ -157,7 +243,7 @@ function recommendedBlock(date,events){const work=events.filter(e=>e.group==='Ar
 
 function toggleWorkday(btn){btn.classList.toggle('active')}
 function profileForm(profile){const days=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag']; return `<div class="card profile-form-card"><h3>Persönliche Angaben</h3><div class="form-grid"><label>Vorname<input id="profileFirstName" value="${esc(profile.firstName)}" placeholder="Vorname"></label><label>Nachname<input id="profileLastName" value="${esc(profile.lastName)}" placeholder="Nachname"></label><label>Email<input id="profileEmail" type="email" value="${esc(profile.email)}" placeholder="name@email.com"></label><label>Telefonnummer<input id="profilePhone" value="${esc(profile.phone)}" placeholder="+41 ..."></label><label>Alter<input id="profileAge" type="number" min="0" value="${esc(profile.age)}"></label><label>Geschlecht<select id="profileGender">${['','Männlich','Weiblich','Divers','Keine Angabe'].map(g=>`<option value="${g}" ${profile.gender===g?'selected':''}>${g||'Bitte wählen'}</option>`).join('')}</select></label><label class="full">Private Adresse<textarea id="profilePrivateAddress">${esc(profile.privateAddress)}</textarea></label><label class="full">Geschäftsadresse<textarea id="profileBusinessAddress">${esc(profile.businessAddress)}</textarea></label><label class="full">Arbeitsstunden pro Woche<input id="profileWeeklyHours" type="number" min="0" max="100" value="${esc(profile.weeklyHours)}"></label></div><div class="workdays"><p>Arbeitstage der Woche</p><div class="workday-grid">${days.map(d=>`<button type="button" data-day="${d}" onclick="toggleWorkday(this)" class="workday-toggle ${profile.workDays.includes(d)?'active':''}">${d.slice(0,2)}</button>`).join('')}</div></div><button class="add-btn" onclick="saveProfile()">Persönliche Angaben speichern</button><p id="profileSavedNote" class="saved-note"></p></div>`}
-function categoryPriorityForm(profile){const cats=['Arbeit','Gesundheit','Sozial','Freiraum'],labels={Arbeit:'Arbeit',Gesundheit:'Gesundheit / Sport',Sozial:'Sozialleben',Freiraum:'Ruhezeit / Freiraum'}; return `<div class="card priority-card"><h3>Kategorien priorisieren</h3><p>Höher priorisierte Kategorien werden bei KI-Zeitvorschlägen bevorzugt.</p>${cats.map(c=>`<div class="priority-row"><div><b>${labels[c]}</b><span id="priorityLabel${c}">${priorityLabel(profile.categoryPriorities[c])}</span></div><input type="range" min="1" max="5" value="${profile.categoryPriorities[c]}" id="priority${c}" oninput="document.getElementById('priorityLabel${c}').textContent=priorityLabel(this.value)"></div>`).join('')}<button class="add-btn" onclick="saveCategoryPriorities()">Prioritäten speichern</button><p id="prioritySavedNote" class="saved-note"></p></div>`}
+function categoryPriorityForm(profile){const cats=['Arbeit','Gesundheit','Sozial','Freiraum'],labels={Arbeit:'Arbeit',Gesundheit:'Gesundheit / Sport',Sozial:'Sozialleben',Freiraum:'Ruhezeit / Freiraum'}; return `<div class="card priority-card"><h3>Kategorien priorisieren</h3><p>Höher priorisierte Kategorien werden bevorzugt. Jede Prioritätsstufe darf nur einmal vorkommen.</p>${cats.map(c=>`<div class="priority-row"><div><b>${labels[c]}</b><span id="priorityLabel${c}">${priorityLabel(profile.categoryPriorities[c])}</span></div><input type="range" min="1" max="5" value="${profile.categoryPriorities[c]}" id="priority${c}" oninput="document.getElementById('priorityLabel${c}').textContent=priorityLabel(this.value)"></div>`).join('')}<button class="add-btn" onclick="saveCategoryPriorities()">Prioritäten speichern</button><p id="prioritySavedNote" class="saved-note"></p></div>`}
 
 async function renderHome(){try{init('home'); document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton('Arbeit')); const [events,weather,goals]=await Promise.all([loadEvents(),loadJSON(WEATHER_URL),loadJSON(GOALS_URL)]); const day=events.filter(e=>e.date===START_DATE),s=stats(events),progress=goalProgress(events,goals); document.getElementById('content').innerHTML=`<div class="hero-date">Prototyp-Tag</div><h1>${weekdayTitle(START_DATE,events)}</h1>${weatherStrip(weather)}<div class="notice">${s.suggested} KI-Zeitvorschläge · ${Math.round(s.travel)} Min. Reisezeit · Tagesenergie: ${dailyEnergy()}</div>${addEventCard('Arbeit')}<div class="quick-actions"><a class="primary-tile" href="arbeit.html"><span>💼</span><b>Arbeit</b></a><a class="primary-tile" href="freizeit.html"><span>🌿</span><b>Freizeit</b></a><a class="primary-tile" href="wochenplan.html"><span>✨</span><b>Wochenplan</b></a></div><div class="section-head"><h2>Ziele</h2><a class="small-link" href="profil.html">Bearbeiten</a></div>${goalCards(progress.slice(0,2))}<div class="section-head"><h2>Heute</h2><a class="small-link" href="wochenplan.html">Alle ansehen</a></div>${day.map(eventWithTravel).join('')}`;}catch(e){showError(e)}}
 async function renderList(kind){try{init(kind==='Arbeit'?'work':'free'); document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton(kind==='Arbeit'?'Arbeit':'Gesundheit')); const events=await loadEvents(); const filtered=kind==='Arbeit'?events.filter(e=>e.group==='Arbeit'):events.filter(e=>e.group==='Freizeit'); const g=byDate(filtered),suggested=filtered.filter(e=>e.timeWasSuggested).length,travel=filtered.reduce((s,e)=>s+(e.travelBefore?.duration||0),0); document.getElementById('content').innerHTML=`<h1>${kind}</h1><p>${filtered.length} Termine aus der JSON-Datei</p><div class="notice">${suggested} KI-Zeitvorschläge · ${travel} Min. Reisezeit/Puffer</div>${addEventCard(kind==='Arbeit'?'Arbeit':'Gesundheit')}${Object.keys(g).sort().map(d=>`<div class="day-block"><div class="day-title">${weekdayTitle(d,events)}</div>${g[d].map(eventWithTravel).join('')}</div>`).join('')}`;}catch(e){showError(e)}}

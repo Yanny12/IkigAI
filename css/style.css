@@ -80,3 +80,8 @@
 .priority-compare b{
   display:block;font-size:13px;color:#111
 }
+
+.editable-event{cursor:pointer}
+.edit-pill{background:rgba(0,122,255,.10);color:#0067D8}
+.sheet-actions.three{grid-template-columns:1fr 1fr 1fr}
+.sheet-actions.three .add-btn,.sheet-actions.three .danger-btn,.sheet-actions.three .secondary-btn{font-size:13px;padding:0 6px}
