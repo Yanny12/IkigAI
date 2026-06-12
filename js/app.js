@@ -60,7 +60,7 @@ function priorityFor(category){return loadProfile().categoryPriorities[category]
 function priorityLabel(v){v=Number(v); return v>=5?'Sehr hoch':v===4?'Hoch':v===3?'Mittel':v===2?'Niedrig':'Sehr niedrig'}
 
 function nav(active){return `<nav class="nav">${[['index.html','home','Home'],['arbeit.html','work','Arbeit'],['freizeit.html','free','Freizeit'],['wochenplan.html','plan','Plan'],['profil.html','profile','Profil']].map(([href,key,label])=>`<a class="${active===key?'active':''}" href="${href}">${icons[key]}${label}</a>`).join('')}</nav>`}
-function header(){return `<header class="header"><div class="logo">IkigAI</div><div class="header-actions"><a class="icon-btn" href="profil.html">${icons.profile}</a><a class="icon-btn" href="profil.html#settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg></a></div></header>`}
+function header(){return `<header class="header"><div class="logo">IkigAI</div><div class="header-actions"><a class="icon-btn" href="profil.html">${icons.profile}</a></div></header>`}
 function init(active){const app=document.getElementById('app'); app.insertAdjacentHTML('afterbegin',header()); app.insertAdjacentHTML('beforeend',nav(active));}
 function showError(err){console.error(err); document.getElementById('content').innerHTML=`<div class="card"><h2>Fehler beim Laden</h2><p>${esc(err.message||err)}</p><p>Bitte prüfe, ob die Dateien im Ordner data/ vorhanden sind.</p></div>`}
 
@@ -84,6 +84,128 @@ function hasConflict(candidate, events){
     return !(ce<=s || cs>=en);
   });
 }
+function nextDates(date,days){
+  const out=[];
+  const d=new Date(date+'T12:00');
+  for(let i=1;i<=days;i++){
+    const n=new Date(d);
+    n.setDate(d.getDate()+i);
+    out.push(n.toISOString().slice(0,10));
+  }
+  return out;
+}
+function preferredForCategory(category){
+  const high=priorityFor(category)>=4;
+  if(category==='Arbeit') return high?['09:00','10:00','14:00']:['14:00','15:00','16:00'];
+  if(category==='Gesundheit') return high?['07:00','18:00','18:30']:['18:30','19:00','19:30'];
+  if(category==='Sozial') return high?['18:00','19:00','20:00']:['19:00','20:00'];
+  if(category==='Freiraum') return high?['12:30','17:30','20:00']:['20:00','20:30'];
+  return ['09:00','14:00','18:00'];
+}
+function suggestionReason(event, date, start, score){
+  const parts=[];
+  if(date===event.date) parts.push('gleicher Tag');
+  else parts.push('nächster passender Tag');
+  if(preferredForCategory(event.category).includes(start)) parts.push('passende Tageszeit für '+event.category);
+  if(priorityFor(event.category)>=4) parts.push('hohe Priorität berücksichtigt');
+  if(event.category==='Freiraum') parts.push('guter Erholungszeitpunkt');
+  if(event.category==='Arbeit') parts.push('produktiver Arbeitsblock');
+  return parts.join(' · ') + ' · Score ' + score;
+}
+function scoreSlot(event, date, start){
+  let score=50;
+  const hour=Number(start.split(':')[0]);
+  const prio=priorityFor(event.category);
+  score += prio*8;
+  if(date===event.date) score += 12;
+  else score -= 4;
+  if(preferredForCategory(event.category).includes(start)) score += 18;
+  if(event.category==='Arbeit' && hour>=9 && hour<=11) score += 10;
+  if(event.category==='Gesundheit' && (hour===7 || hour>=18)) score += 10;
+  if(event.category==='Sozial' && hour>=18) score += 10;
+  if(event.category==='Freiraum' && (hour===12 || hour>=17)) score += 10;
+  if(hour>=20 && event.category==='Arbeit') score -= 18;
+  return Math.max(0, Math.min(100, score));
+}
+function findSuggestedSlots(eventToMove, fixedEvents){
+  const duration=Number(eventToMove.duration||60);
+  const fallback=['08:00','08:30','09:00','09:30','10:00','10:30','11:00','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00'];
+  const dates=[eventToMove.date].concat(nextDates(eventToMove.date,7));
+  const suggestions=[];
+  for(const date of dates){
+    const slots=[...new Set(preferredForCategory(eventToMove.category).concat(fallback))];
+    for(const start of slots){
+      const candidate={...eventToMove,date,start,end:endTime(start,duration)};
+      const conflict=hasConflict(candidate,fixedEvents.filter(e=>String(e.id)!==String(eventToMove.id)&&String(e.originalId)!==String(eventToMove.id)));
+      if(!conflict){
+        const score=scoreSlot(eventToMove,date,start);
+        suggestions.push({...candidate,score,reason:suggestionReason(eventToMove,date,start,score)});
+      }
+    }
+  }
+  return suggestions.sort((a,b)=>b.score-a.score || a.date.localeCompare(b.date) || a.start.localeCompare(b.start)).slice(0,3);
+}
+function applyConflictSuggestion(index){
+  const candidate=window._pendingConflictCandidate;
+  const conflict=window._pendingConflictEvent;
+  if(!candidate || !conflict) return;
+  const suggestions=window._pendingConflictSuggestions || [];
+  const chosen=suggestions[index];
+  if(!chosen) return;
+  rescheduleConflictAndSave(candidate, conflict, chosen);
+}
+function makeLocalOverride(event, patch={}){
+  return {
+    ...event,
+    ...patch,
+    id:String(event.id).startsWith('local-') || String(event.id).startsWith('edited-') ? event.id : 'edited-'+event.id,
+    originalId:String(event.id).startsWith('local-') ? null : (event.originalId || event.id),
+    edited:true
+  };
+}
+function rescheduleConflictAndSave(newEvent, conflict, chosenSuggestion=null){
+  const baseEvents=conflictBaseEvents.length?conflictBaseEvents:[];
+  const all=baseEvents.concat(localEvents());
+  const fixedEvents=all.filter(e=>String(e.id)!==String(conflict.id)&&String(e.originalId)!==String(conflict.id)&&String(e.id)!==String(newEvent.id));
+  const suggestions=findSuggestedSlots(conflict,fixedEvents.concat([newEvent]));
+  if(!chosenSuggestion){
+    window._pendingConflictSuggestions=suggestions;
+    if(!suggestions.length){
+      document.getElementById('conflictArea').innerHTML='<div class="conflict-box"><b>Kein guter Vorschlag gefunden</b><p>IkigAI konnte keinen sinnvollen freien Zeitpunkt finden. Bitte passe eine Zeit manuell an.</p></div>';
+      return;
+    }
+    document.getElementById('conflictArea').innerHTML=renderSuggestionChoices(conflict,suggestions);
+    return;
+  }
+  const movedOverride=makeLocalOverride(conflict,{
+    date:chosenSuggestion.date,
+    weekday:new Date(chosenSuggestion.date+'T12:00').toLocaleDateString('de-CH',{weekday:'long'}),
+    start:chosenSuggestion.start,
+    end:chosenSuggestion.end,
+    description:(conflict.description||'') + ' · verschoben nach IkigAI-Vorschlag',
+    rescheduledByConflict:true,
+    rescheduleReason:chosenSuggestion.reason
+  });
+  const locals=localEvents().filter(e=>String(e.id)!==String(newEvent.id)&&String(e.originalId)!==String(newEvent.id)&&String(e.id)!==String(movedOverride.id)&&String(e.originalId)!==String(movedOverride.originalId));
+  locals.push(newEvent);
+  locals.push(movedOverride);
+  saveLocalEvents(locals);
+  closeEventModal();
+  location.reload();
+}
+function renderSuggestionChoices(conflict, suggestions){
+  return `<div class="conflict-box"><b>IkigAI Vorschläge für „${esc(conflict.title)}“</b>
+    <p>Wähle einen vorgeschlagenen neuen Zeitpunkt für den bestehenden Termin.</p>
+    <div class="suggestion-list">
+      ${suggestions.map((s,i)=>`<button class="suggestion-choice" onclick="applyConflictSuggestion(${i})">
+        <b>${new Date(s.date+'T12:00').toLocaleDateString('de-CH',{weekday:'short',day:'2-digit',month:'2-digit'})} · ${s.start}–${s.end}</b>
+        <span>${esc(s.reason)}</span>
+      </button>`).join('')}
+    </div>
+    <button class="secondary-btn full-width" onclick="suggestAlternativeTime()">Zeit des neuen Termins anpassen</button>
+  </div>`
+}
+
 let conflictBaseEvents=[];
 function suggestAlternativeTime(){
   const category=document.getElementById('newCategory').value;
@@ -101,13 +223,15 @@ function suggestAlternativeTime(){
   document.getElementById('conflictArea').innerHTML=`<p class="sheet-note">Keine freie Alternative gefunden. Bitte manuell anpassen oder ignorieren.</p>`;
 }
 function conflictWarning(candidate, conflict){
+  window._pendingConflictCandidate=candidate;
+  window._pendingConflictEvent=conflict;
   const newPriority=priorityFor(candidate.category);
   const conflictPriority=priorityFor(conflict.category);
   const recommendation = newPriority > conflictPriority
-    ? 'Der neue Termin hat eine höhere Priorität.'
+    ? 'Der neue Termin hat eine höhere Priorität. IkigAI verschiebt den bestehenden Termin.'
     : newPriority < conflictPriority
-      ? 'Der bestehende Termin hat eine höhere Priorität.'
-      : 'Beide Termine haben die gleiche Priorität.';
+      ? 'Der bestehende Termin hat eine höhere Priorität. IkigAI empfiehlt, zuerst die Zeit des neuen Termins anzupassen.'
+      : 'Beide Termine haben die gleiche Priorität. IkigAI kann den bestehenden Termin auf den nächsten freien Slot verschieben.';
   return `<div class="conflict-box"><b>Terminkonflikt erkannt</b>
     <p>Überschneidung mit „${esc(conflict.title)}“ (${conflict.start}–${conflict.end}).</p>
     <div class="priority-compare">
@@ -115,7 +239,7 @@ function conflictWarning(candidate, conflict){
       <div><span>Bestehender Termin</span><b>${esc(conflict.category)} · Priorität ${conflictPriority}</b></div>
     </div>
     <p><strong>IkigAI Empfehlung:</strong> ${recommendation}</p>
-    <div class="conflict-actions"><button class="secondary-btn" onclick="suggestAlternativeTime()">Zeit anpassen</button><button class="danger-btn" onclick="saveNewEvent(true)">Trotzdem speichern</button></div></div>`
+    <div class="conflict-actions"><button class="secondary-btn" onclick="suggestAlternativeTime()">Zeit des neuen Termins anpassen</button><button class="danger-btn" onclick="rescheduleConflictAndSave(window._pendingConflictCandidate, window._pendingConflictEvent)">Vorschläge anzeigen</button></div></div>`
 }
 
 function addEventButton(defaultCategory='Arbeit'){return `<button class="floating-add" onclick="openEventModal('${defaultCategory}')" aria-label="Neuer Termin">+</button>`}
@@ -218,6 +342,7 @@ async function saveNewEvent(ignoreConflict=false){
   conflictBaseEvents=await loadJSON(DATA_URL);
   const conflict=hasConflict(event,[...conflictBaseEvents,...localEvents()]);
   if(conflict && !ignoreConflict){document.getElementById('conflictArea').innerHTML=conflictWarning(event,conflict);return}
+  if(conflict && ignoreConflict){rescheduleConflictAndSave(event,conflict);return}
   const events=localEvents(); events.push(event); saveLocalEvents(events); closeEventModal(); location.reload();
 }
 
@@ -225,18 +350,27 @@ function accent(e){if(e.group==='Arbeit')return'#007AFF';if(e.category==='Freira
 function groupLabel(e){if(e.group==='Arbeit')return'Arbeit';if(e.category==='Freiraum')return'Ruhezeit';return'Freizeit'}
 function eventCard(e){
   const cls=e.group==='Arbeit'?'work':(e.category==='Freiraum'?'rest':'free');
-  return `<article class="card event-card editable-event" onclick="openEditEventModal('${e.id}')" style="--accent:${accent(e)}">
-    <div><div class="event-time">${esc(e.start)}</div><div class="event-end">${esc(e.end||'')}</div></div>
-    <div><div class="event-title">${esc(e.title)}</div><p>${esc(e.description)}</p>
-    <div class="event-meta"><span class="pill ${cls}">${groupLabel(e)}</span><span class="pill">${esc(e.category)}</span><span class="pill">${e.duration} Min.</span><span class="pill ai">Priorität ${priorityFor(e.category)}</span>${e.location?`<span class="pill">${esc(e.location)}</span>`:''}${e.timeWasSuggested?`<span class="pill ai">KI-Zeitvorschlag</span>`:''}${e.workLocationRecommendation?`<span class="pill location">${esc(e.workLocationRecommendation)}</span>`:''}${e.weatherRecommendation?`<span class="pill weather">${esc(e.weatherRecommendation)}</span>`:''}${e.goalImpact?.length?`<span class="pill free">Zielbeitrag</span>`:''}${e.conflictIgnored?`<span class="pill ai">Konflikt ignoriert</span>`:''}<span class="pill edit-pill">Antippen zum Bearbeiten</span></div></div>
+  const status = e.rescheduledByConflict ? 'Verschoben' : (e.timeWasSuggested ? 'KI-Zeit' : '');
+  return `<article class="card event-card compact-event editable-event" onclick="openEditEventModal('${e.id}')" style="--accent:${accent(e)}">
+    <div class="time-col"><div class="event-time">${esc(e.start)}</div><div class="event-end">${esc(e.end||'')}</div></div>
+    <div>
+      <div class="event-title-row"><div class="event-title">${esc(e.title)}</div>${status?`<span class="mini-status">${status}</span>`:''}</div>
+      <p class="compact-meta">${esc(e.location||'Kein Ort')} · ${esc(e.category)} · ${e.duration} Min.</p>
+    </div>
   </article>`
 }
-function travelCard(t){if(!t)return''; return `<article class="card travel-card"><div><div class="event-time">${t.start}</div><div class="event-end">${t.end}</div></div><div><div class="event-title">Reisezeit</div><p>Automatisch eingeplant zwischen unterschiedlichen Orten.</p><div class="event-meta"><span class="pill rest">${t.duration} Min.</span><span class="pill">Puffer</span></div></div></article>`}
+function travelCard(t){
+  if(!t)return'';
+  return `<article class="card travel-card compact-travel">
+    <div class="time-col"><div class="event-time">${t.start}</div><div class="event-end">${t.end}</div></div>
+    <div><div class="event-title">Reisezeit</div><p class="compact-meta">${t.duration} Min. Puffer</p></div>
+  </article>`
+}
 function eventWithTravel(e){return travelCard(e.travelBefore)+eventCard(e)}
 function byDate(events){return events.reduce((a,e)=>{(a[e.date]??=[]).push(e);return a},{})}
 function weekdayTitle(date,events){const e=events.find(x=>x.date===date); const d=new Date(date+'T12:00:00'); return `${e?e.weekday:''}, ${d.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'numeric'})}`}
 function weatherIcon(c){return c==='sun'?'☀️':c==='rain'?'🌧️':c==='storm'?'⛈️':'☁️'}
-function weatherStrip(weather){return `<div class="weather-strip">${Object.entries(weather).slice(0,4).map(([d,w])=>`<div class="weather-mini"><b>${weatherIcon(w.condition)}</b><span>${new Date(d+'T12:00').toLocaleDateString('de-CH',{weekday:'short'})}</span><p>${w.temp}°</p></div>`).join('')}</div>`}
+function weatherStrip(weather){return `<div class="weather-strip">${Object.entries(weather).slice(0,3).map(([d,w])=>`<div class="weather-mini"><b>${weatherIcon(w.condition)}</b><span>${new Date(d+'T12:00').toLocaleDateString('de-CH',{weekday:'short'})}</span><p>${w.temp}°</p></div>`).join('')}</div>`}
 function stats(events){const sum=f=>events.filter(f).reduce((s,e)=>s+(e.duration||0),0),work=sum(e=>e.group==='Arbeit'),health=sum(e=>e.category==='Gesundheit'),social=sum(e=>e.category==='Sozial'),rest=sum(e=>e.category==='Freiraum'); const travel=events.reduce((s,e)=>s+(e.travelBefore?.duration||0),0); const ws=Math.max(35,Math.min(95,Math.round(100-Math.abs(work/60-32)*2.2))),hs=Math.max(35,Math.min(95,Math.round(55+health/60*7))),ss=Math.max(35,Math.min(95,Math.round(55+social/60*7))),rs=Math.max(30,Math.min(95,Math.round(45+rest/60*9))); return {workScore:ws,healthScore:hs,socialScore:ss,restScore:rs,balance:Math.round((ws+hs+ss+rs)/4),suggested:events.filter(e=>e.timeWasSuggested).length,travel}}
 function goalProgress(events,goals){return goals.map(g=>{let count=0;if(g.id==='revenue')count=Math.round(events.filter(e=>e.group==='Arbeit').reduce((a,e)=>a+e.duration,0)/60);else count=events.filter(e=>e.goalImpact?.includes(g.id)).length;return {...g,count,pct:Math.min(100,Math.round(count/g.target*100))}})}
 function goalCards(progress){return progress.map(g=>`<div class="card goal-card"><div><h3>${esc(g.title)}</h3><p>${g.count} / ${g.target} ${esc(g.unit)}</p></div><div class="progress" style="--w:${g.pct}%"><span></span></div></div>`).join('')}
@@ -250,7 +384,52 @@ function toggleWorkday(btn){btn.classList.toggle('active')}
 function profileForm(profile){const days=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag']; return `<div class="card profile-form-card"><h3>Persönliche Angaben</h3><div class="form-grid"><label>Vorname<input id="profileFirstName" value="${esc(profile.firstName)}" placeholder="Vorname"></label><label>Nachname<input id="profileLastName" value="${esc(profile.lastName)}" placeholder="Nachname"></label><label>Email<input id="profileEmail" type="email" value="${esc(profile.email)}" placeholder="name@email.com"></label><label>Telefonnummer<input id="profilePhone" value="${esc(profile.phone)}" placeholder="+41 ..."></label><label>Alter<input id="profileAge" type="number" min="0" value="${esc(profile.age)}"></label><label>Geschlecht<select id="profileGender">${['','Männlich','Weiblich','Divers','Keine Angabe'].map(g=>`<option value="${g}" ${profile.gender===g?'selected':''}>${g||'Bitte wählen'}</option>`).join('')}</select></label><label class="full">Private Adresse<textarea id="profilePrivateAddress">${esc(profile.privateAddress)}</textarea></label><label class="full">Geschäftsadresse<textarea id="profileBusinessAddress">${esc(profile.businessAddress)}</textarea></label><label class="full">Arbeitsstunden pro Woche<input id="profileWeeklyHours" type="number" min="0" max="100" value="${esc(profile.weeklyHours)}"></label></div><div class="workdays"><p>Arbeitstage der Woche</p><div class="workday-grid">${days.map(d=>`<button type="button" data-day="${d}" onclick="toggleWorkday(this)" class="workday-toggle ${profile.workDays.includes(d)?'active':''}">${d.slice(0,2)}</button>`).join('')}</div></div><button class="add-btn" onclick="saveProfile()">Persönliche Angaben speichern</button><p id="profileSavedNote" class="saved-note"></p></div>`}
 function categoryPriorityForm(profile){const cats=['Arbeit','Gesundheit','Sozial','Freiraum'],labels={Arbeit:'Arbeit',Gesundheit:'Gesundheit / Sport',Sozial:'Sozialleben',Freiraum:'Ruhezeit / Freiraum'}; return `<div class="card priority-card"><h3>Kategorien priorisieren</h3><p>Höher priorisierte Kategorien werden bevorzugt. Jede Prioritätsstufe darf nur einmal vorkommen.</p>${cats.map(c=>`<div class="priority-row"><div><b>${labels[c]}</b><span id="priorityLabel${c}">${priorityLabel(profile.categoryPriorities[c])}</span></div><input type="range" min="1" max="5" value="${profile.categoryPriorities[c]}" id="priority${c}" oninput="document.getElementById('priorityLabel${c}').textContent=priorityLabel(this.value)"></div>`).join('')}<button class="add-btn" onclick="saveCategoryPriorities()">Prioritäten speichern</button><p id="prioritySavedNote" class="saved-note"></p></div>`}
 
-async function renderHome(){try{init('home'); document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton('Arbeit')); const [events,weather,goals]=await Promise.all([loadEvents(),loadJSON(WEATHER_URL),loadJSON(GOALS_URL)]); const day=events.filter(e=>e.date===START_DATE),s=stats(events),progress=goalProgress(events,goals); document.getElementById('content').innerHTML=`<div class="hero-date">Prototyp-Tag</div><h1>${weekdayTitle(START_DATE,events)}</h1>${weatherStrip(weather)}<div class="notice">${s.suggested} KI-Zeitvorschläge · ${Math.round(s.travel)} Min. Reisezeit · Tagesenergie: ${dailyEnergy()}</div>${addEventCard('Arbeit')}<div class="quick-actions"><a class="primary-tile" href="arbeit.html"><span>💼</span><b>Arbeit</b></a><a class="primary-tile" href="freizeit.html"><span>🌿</span><b>Freizeit</b></a><a class="primary-tile" href="wochenplan.html"><span>✨</span><b>Wochenplan</b></a></div><div class="section-head"><h2>Ziele</h2><a class="small-link" href="profil.html">Bearbeiten</a></div>${goalCards(progress.slice(0,2))}<div class="section-head"><h2>Heute</h2><a class="small-link" href="wochenplan.html">Alle ansehen</a></div>${day.map(eventWithTravel).join('')}`;}catch(e){showError(e)}}
-async function renderList(kind){try{init(kind==='Arbeit'?'work':'free'); document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton(kind==='Arbeit'?'Arbeit':'Gesundheit')); const events=await loadEvents(); const filtered=kind==='Arbeit'?events.filter(e=>e.group==='Arbeit'):events.filter(e=>e.group==='Freizeit'); const g=byDate(filtered),suggested=filtered.filter(e=>e.timeWasSuggested).length,travel=filtered.reduce((s,e)=>s+(e.travelBefore?.duration||0),0); document.getElementById('content').innerHTML=`<h1>${kind}</h1><p>${filtered.length} Termine aus der JSON-Datei</p><div class="notice">${suggested} KI-Zeitvorschläge · ${travel} Min. Reisezeit/Puffer</div>${addEventCard(kind==='Arbeit'?'Arbeit':'Gesundheit')}${Object.keys(g).sort().map(d=>`<div class="day-block"><div class="day-title">${weekdayTitle(d,events)}</div>${g[d].map(eventWithTravel).join('')}</div>`).join('')}`;}catch(e){showError(e)}}
-async function renderPlan(){try{init('plan'); const [events,weather,goals]=await Promise.all([loadEvents(),loadJSON(WEATHER_URL),loadJSON(GOALS_URL)]); const s=stats(events),g=byDate(events),progress=goalProgress(events,goals); document.getElementById('content').innerHTML=`<h1>KI-Wochenplan</h1>${weatherStrip(weather)}<div class="score-card"><p style="color:rgba(255,255,255,.82)">IkigAI Balance Score</p><div class="score-number">${s.balance}<span style="font-size:22px">/100</span></div><div class="score-grid"><div class="metric"><b>${s.workScore}%</b><span>Arbeit</span></div><div class="metric"><b>${s.healthScore}%</b><span>Gesundheit</span></div><div class="metric"><b>${s.socialScore}%</b><span>Sozialleben</span></div><div class="metric"><b>${s.restScore}%</b><span>Erholung</span></div></div></div><h2>Ziel-Fortschritt</h2>${goalCards(progress)}<h2>KI Insights</h2>${insights(events).map(t=>`<div class="card insight"><div class="check">✓</div><p>${esc(t)}</p></div>`).join('')}<h2>Optimierter Wochenplan</h2>${Object.keys(g).sort().map(d=>`<div class="day-block"><div class="day-title">${weekdayTitle(d,events)}</div>${recommendedBlock(d,g[d])}${g[d].map(eventWithTravel).join('')}</div>`).join('')}`;}catch(e){showError(e)}}
+async function renderHome(){try{
+  init('home');
+  document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton('Arbeit'));
+  const [events,weather,goals]=await Promise.all([loadEvents(),loadJSON(WEATHER_URL),loadJSON(GOALS_URL)]);
+  const day=events.filter(e=>e.date===START_DATE);
+  const s=stats(events);
+  document.getElementById('content').innerHTML=`
+    <div class="top-summary">
+      <div><div class="hero-date">Heute</div><h1>${weekdayTitle(START_DATE,events)}</h1></div>
+      <div class="small-score">${s.balance}</div>
+    </div>
+    ${weatherStrip(weather)}
+    ${addEventCard('Arbeit')}
+    <div class="quick-actions compact-actions">
+      <a class="primary-tile" href="arbeit.html"><span>💼</span><b>Arbeit</b></a>
+      <a class="primary-tile" href="freizeit.html"><span>🌿</span><b>Freizeit</b></a>
+      <a class="primary-tile" href="wochenplan.html"><span>✨</span><b>Plan</b></a>
+    </div>
+    <div class="section-head"><h2>Heute</h2><a class="small-link" href="wochenplan.html">Woche</a></div>
+    ${day.map(eventWithTravel).join('')}`;
+}catch(e){showError(e)}}
+async function renderList(kind){try{
+  init(kind==='Arbeit'?'work':'free');
+  document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton(kind==='Arbeit'?'Arbeit':'Gesundheit'));
+  const events=await loadEvents();
+  const filtered=kind==='Arbeit'?events.filter(e=>e.group==='Arbeit'):events.filter(e=>e.group==='Freizeit');
+  const g=byDate(filtered);
+  document.getElementById('content').innerHTML=`
+    <div class="top-summary"><div><h1>${kind}</h1><p>${filtered.length} Termine</p></div></div>
+    ${addEventCard(kind==='Arbeit'?'Arbeit':'Gesundheit')}
+    ${Object.keys(g).sort().map(d=>`<div class="day-block"><div class="day-title">${weekdayTitle(d,events)}</div>${g[d].map(eventWithTravel).join('')}</div>`).join('')}`;
+}catch(e){showError(e)}}
+async function renderPlan(){try{
+  init('plan');
+  const [events,weather,goals]=await Promise.all([loadEvents(),loadJSON(WEATHER_URL),loadJSON(GOALS_URL)]);
+  const s=stats(events),g=byDate(events);
+  const insightList=insights(events).slice(0,3);
+  document.getElementById('content').innerHTML=`
+    <h1>Wochenplan</h1>
+    <div class="score-card simple-score-card">
+      <div><p style="color:rgba(255,255,255,.82)">IkigAI Score</p><div class="score-number">${s.balance}<span style="font-size:20px">/100</span></div></div>
+      <div class="simple-metrics"><span>Arbeit ${s.workScore}%</span><span>Gesundheit ${s.healthScore}%</span><span>Erholung ${s.restScore}%</span></div>
+    </div>
+    <h2>Empfehlungen</h2>
+    ${insightList.map(t=>`<div class="card insight compact-insight"><div class="check">✓</div><p>${esc(t)}</p></div>`).join('')}
+    <h2>Woche</h2>
+    ${Object.keys(g).sort().map(d=>`<div class="day-block"><div class="day-title">${weekdayTitle(d,events)}</div>${g[d].map(eventWithTravel).join('')}</div>`).join('')}`;
+}catch(e){showError(e)}}
 async function renderProfile(){try{init('profile'); const [events,goals]=await Promise.all([loadEvents(),loadJSON(GOALS_URL)]); const profile=loadProfile(),progress=goalProgress(events,goals),energy=dailyEnergy(); document.getElementById('content').innerHTML=`<h1>Profil</h1>${profileForm(profile)}${categoryPriorityForm(profile)}<div class="card"><h3>Tagesenergie</h3><p>${energyInsight()}</p><div class="preference" style="margin-top:12px"><button onclick="setEnergy('morning')" class="pref-btn ${energy==='morning'?'active':''}">Morgen</button><button onclick="setEnergy('neutral')" class="pref-btn ${energy==='neutral'?'active':''}">Neutral</button><button onclick="setEnergy('evening')" class="pref-btn ${energy==='evening'?'active':''}">Abend</button></div></div><h2>Ziele</h2>${goalCards(progress)}<div class="card"><h3>Aktivitäten → Ziele</h3><div class="list-row"><span>Joggen / Padel → 5 kg abnehmen</span></div><div class="list-row"><span>Freiraum → Stress reduzieren</span></div><div class="list-row"><span>Sozial → Familie & Freunde</span></div><div class="list-row"><span>Arbeit → Umsatz steigern</span></div></div><div class="card"><h3>Arbeitsorte</h3>${['Zuhause','Büro','Coworking','Café'].map(x=>`<div class="list-row"><span>${x}</span><span>✓</span></div>`).join('')}</div><div class="card" id="settings"><h3>Kalenderintegration</h3>${['Apple Calendar','Google Calendar','Outlook'].map(x=>`<div class="list-row"><span>${x}</span><button class="status-btn">Verbinden</button></div>`).join('')}</div>`;}catch(e){showError(e)}}

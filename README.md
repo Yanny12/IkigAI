@@ -63,3 +63,25 @@ V1.7.1 syntax fix
 - Kategorie ist Pflichtfeld
 - Titel, Kategorie und Dauer werden validiert
 - Kategorie steht im Formular direkt unter dem Titel
+
+
+## Neu in V1.9
+- Bei Terminkonflikt wird der bestehende Konflikttermin automatisch verschoben
+- Der neue Termin wird gespeichert, der bestehende Termin bekommt den nächsten freien Slot
+- Verschobene Termine erhalten den Badge `Automatisch verschoben`
+
+
+## Neu in V2.0
+- Bei Konflikten wird nicht mehr automatisch der nächste freie Slot gewählt.
+- IkigAI erstellt bis zu 3 bewertete Vorschläge.
+- Vorschläge berücksichtigen Kategorie, Priorität, Tageszeit und gleichen/nächsten Tag.
+- User wählt explizit den gewünschten Vorschlag.
+
+
+## Neu in V2.1 Simple UI
+- UI deutlich reduziert und kompakter
+- Einstellungs-Icon oben rechts entfernt
+- Weniger Badges und Detailinformationen pro Termin
+- Kompaktere Karten, Wetteranzeige und Wochenplan
+- Home zeigt keine langen Zielkarten mehr
+- Weniger Scrollen durch reduzierte Abstände und verdichtete Inhalte
