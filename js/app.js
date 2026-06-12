@@ -18,7 +18,7 @@ async function loadJSON(url){const r=await fetch(url); if(!r.ok) throw new Error
 function localEvents(){return safeJSON('ikigai_events',[])}
 function saveLocalEvents(events){localStorage.setItem('ikigai_events',JSON.stringify(events))}
 async function loadEvents(){const base=await loadJSON(DATA_URL); return [...base,...localEvents()].sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))}
-function defaultProfile(){return {firstName:'',lastName:'',email:'',phone:'',age:'',gender:'',privateAddress:'',businessAddress:'',weeklyHours:40,workDays:['Montag','Dienstag','Mittwoch','Donnerstag','Freitag'],categoryPriorities:{Arbeit:5,Gesundheit:4,Sozial:3,Hund:3,Freiraum:4}}}
+function defaultProfile(){return {firstName:'',lastName:'',email:'',phone:'',age:'',gender:'',privateAddress:'',businessAddress:'',weeklyHours:40,workDays:['Montag','Dienstag','Mittwoch','Donnerstag','Freitag'],categoryPriorities:{Arbeit:5,Gesundheit:4,Sozial:3,Freiraum:4}}}
 function loadProfile(){const p={...defaultProfile(),...safeJSON('ikigai_profile',{})}; p.categoryPriorities={...defaultProfile().categoryPriorities,...(p.categoryPriorities||{})}; p.workDays=p.workDays||defaultProfile().workDays; return p}
 function saveProfile(){
   const profile=loadProfile();
@@ -37,7 +37,7 @@ function saveProfile(){
 }
 function saveCategoryPriorities(){
   const profile=loadProfile();
-  ['Arbeit','Gesundheit','Sozial','Hund','Freiraum'].forEach(c=>profile.categoryPriorities[c]=Number(document.getElementById('priority'+c).value));
+  ['Arbeit','Gesundheit','Sozial','Freiraum'].forEach(c=>profile.categoryPriorities[c]=Number(document.getElementById('priority'+c).value));
   localStorage.setItem('ikigai_profile',JSON.stringify(profile));
   flash('prioritySavedNote');
 }
@@ -57,7 +57,7 @@ function nextLocalId(){return 'local-'+Date.now()}
 function suggestedTimeFor(category){
   const high=priorityFor(category)>=4;
   if(category==='Arbeit') return high?'09:00':'14:00';
-  if(category==='Hund') return high?'07:00':'12:00';
+  
   if(category==='Gesundheit') return high?'18:00':'19:30';
   if(category==='Sozial') return high?'19:00':'20:00';
   if(category==='Freiraum') return high?'17:30':'20:30';
@@ -86,7 +86,23 @@ function suggestAlternativeTime(){
   }
   document.getElementById('conflictArea').innerHTML=`<p class="sheet-note">Keine freie Alternative gefunden. Bitte manuell anpassen oder ignorieren.</p>`;
 }
-function conflictWarning(conflict){return `<div class="conflict-box"><b>Terminkonflikt erkannt</b><p>Überschneidung mit „${esc(conflict.title)}“ (${conflict.start}–${conflict.end}).</p><div class="conflict-actions"><button class="secondary-btn" onclick="suggestAlternativeTime()">Zeit anpassen</button><button class="danger-btn" onclick="saveNewEvent(true)">Trotzdem speichern</button></div></div>`}
+function conflictWarning(candidate, conflict){
+  const newPriority=priorityFor(candidate.category);
+  const conflictPriority=priorityFor(conflict.category);
+  const recommendation = newPriority > conflictPriority
+    ? 'Der neue Termin hat eine höhere Priorität.'
+    : newPriority < conflictPriority
+      ? 'Der bestehende Termin hat eine höhere Priorität.'
+      : 'Beide Termine haben die gleiche Priorität.';
+  return `<div class="conflict-box"><b>Terminkonflikt erkannt</b>
+    <p>Überschneidung mit „${esc(conflict.title)}“ (${conflict.start}–${conflict.end}).</p>
+    <div class="priority-compare">
+      <div><span>Neuer Termin</span><b>${esc(candidate.category)} · Priorität ${newPriority}</b></div>
+      <div><span>Bestehender Termin</span><b>${esc(conflict.category)} · Priorität ${conflictPriority}</b></div>
+    </div>
+    <p><strong>IkigAI Empfehlung:</strong> ${recommendation}</p>
+    <div class="conflict-actions"><button class="secondary-btn" onclick="suggestAlternativeTime()">Zeit anpassen</button><button class="danger-btn" onclick="saveNewEvent(true)">Trotzdem speichern</button></div></div>`
+}
 
 function addEventButton(defaultCategory='Arbeit'){return `<button class="floating-add" onclick="openEventModal('${defaultCategory}')" aria-label="Neuer Termin">+</button>`}
 function addEventCard(defaultCategory='Arbeit'){return `<button class="add-event-card" onclick="openEventModal('${defaultCategory}')"><span>+</span><div><b>Neuer Termin</b><p>Termin manuell erfassen oder Zeit von IkigAI vorschlagen lassen</p></div></button>`}
@@ -98,7 +114,7 @@ function openEventModal(defaultCategory='Arbeit'){
     <label>Startzeit optional</label><input id="newStart" type="time">
     <label>Dauer in Minuten</label><input id="newDuration" type="number" value="60" min="15" step="15">
     <label>Ort</label><input id="newLocation" placeholder="z.B. Büro, Zuhause, Draussen">
-    <label>Kategorie</label><select id="newCategory">${['Arbeit','Gesundheit','Sozial','Hund','Freiraum'].map(c=>`<option ${c===defaultCategory?'selected':''}>${c}</option>`).join('')}</select>
+    <label>Kategorie</label><select id="newCategory">${['Arbeit','Gesundheit','Sozial','Freiraum'].map(c=>`<option ${c===defaultCategory?'selected':''}>${c}</option>`).join('')}</select>
     <div id="conflictArea"></div>
     <div class="sheet-actions"><button class="secondary-btn" onclick="closeEventModal()">Abbrechen</button><button class="add-btn" onclick="saveNewEvent(false)">Speichern</button></div>
     <p class="sheet-note">Ohne Startzeit vergibt IkigAI einen Zeitvorschlag anhand deiner Kategorie-Prioritäten.</p></div>`;
@@ -117,7 +133,7 @@ async function saveNewEvent(ignoreConflict=false){
   const event={id:nextLocalId(),date,weekday:new Date(date+'T12:00').toLocaleDateString('de-CH',{weekday:'long'}),start,end:endTime(start,duration),title,description:'Manuell erfasst',duration,location:document.getElementById('newLocation').value.trim(),priority:String(priorityFor(category)),category,group:category==='Arbeit'?'Arbeit':'Freizeit',energy:'Mittel',timeWasSuggested:suggested,goalImpact:[],travelBefore:null,workLocationRecommendation:category==='Arbeit'?'Arbeitsort wird in der nächsten Optimierung empfohlen':null,weatherRecommendation:null,conflictIgnored:ignoreConflict};
   conflictBaseEvents=await loadJSON(DATA_URL);
   const conflict=hasConflict(event,[...conflictBaseEvents,...localEvents()]);
-  if(conflict && !ignoreConflict){document.getElementById('conflictArea').innerHTML=conflictWarning(conflict);return}
+  if(conflict && !ignoreConflict){document.getElementById('conflictArea').innerHTML=conflictWarning(event,conflict);return}
   const events=localEvents(); events.push(event); saveLocalEvents(events); closeEventModal(); location.reload();
 }
 
@@ -141,7 +157,7 @@ function recommendedBlock(date,events){const work=events.filter(e=>e.group==='Ar
 
 function toggleWorkday(btn){btn.classList.toggle('active')}
 function profileForm(profile){const days=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag']; return `<div class="card profile-form-card"><h3>Persönliche Angaben</h3><div class="form-grid"><label>Vorname<input id="profileFirstName" value="${esc(profile.firstName)}" placeholder="Vorname"></label><label>Nachname<input id="profileLastName" value="${esc(profile.lastName)}" placeholder="Nachname"></label><label>Email<input id="profileEmail" type="email" value="${esc(profile.email)}" placeholder="name@email.com"></label><label>Telefonnummer<input id="profilePhone" value="${esc(profile.phone)}" placeholder="+41 ..."></label><label>Alter<input id="profileAge" type="number" min="0" value="${esc(profile.age)}"></label><label>Geschlecht<select id="profileGender">${['','Männlich','Weiblich','Divers','Keine Angabe'].map(g=>`<option value="${g}" ${profile.gender===g?'selected':''}>${g||'Bitte wählen'}</option>`).join('')}</select></label><label class="full">Private Adresse<textarea id="profilePrivateAddress">${esc(profile.privateAddress)}</textarea></label><label class="full">Geschäftsadresse<textarea id="profileBusinessAddress">${esc(profile.businessAddress)}</textarea></label><label class="full">Arbeitsstunden pro Woche<input id="profileWeeklyHours" type="number" min="0" max="100" value="${esc(profile.weeklyHours)}"></label></div><div class="workdays"><p>Arbeitstage der Woche</p><div class="workday-grid">${days.map(d=>`<button type="button" data-day="${d}" onclick="toggleWorkday(this)" class="workday-toggle ${profile.workDays.includes(d)?'active':''}">${d.slice(0,2)}</button>`).join('')}</div></div><button class="add-btn" onclick="saveProfile()">Persönliche Angaben speichern</button><p id="profileSavedNote" class="saved-note"></p></div>`}
-function categoryPriorityForm(profile){const cats=['Arbeit','Gesundheit','Sozial','Hund','Freiraum'],labels={Arbeit:'Arbeit',Gesundheit:'Gesundheit / Sport',Sozial:'Sozialleben',Hund:'Hund',Freiraum:'Ruhezeit / Freiraum'}; return `<div class="card priority-card"><h3>Kategorien priorisieren</h3><p>Höher priorisierte Kategorien werden bei KI-Zeitvorschlägen bevorzugt.</p>${cats.map(c=>`<div class="priority-row"><div><b>${labels[c]}</b><span id="priorityLabel${c}">${priorityLabel(profile.categoryPriorities[c])}</span></div><input type="range" min="1" max="5" value="${profile.categoryPriorities[c]}" id="priority${c}" oninput="document.getElementById('priorityLabel${c}').textContent=priorityLabel(this.value)"></div>`).join('')}<button class="add-btn" onclick="saveCategoryPriorities()">Prioritäten speichern</button><p id="prioritySavedNote" class="saved-note"></p></div>`}
+function categoryPriorityForm(profile){const cats=['Arbeit','Gesundheit','Sozial','Freiraum'],labels={Arbeit:'Arbeit',Gesundheit:'Gesundheit / Sport',Sozial:'Sozialleben',Freiraum:'Ruhezeit / Freiraum'}; return `<div class="card priority-card"><h3>Kategorien priorisieren</h3><p>Höher priorisierte Kategorien werden bei KI-Zeitvorschlägen bevorzugt.</p>${cats.map(c=>`<div class="priority-row"><div><b>${labels[c]}</b><span id="priorityLabel${c}">${priorityLabel(profile.categoryPriorities[c])}</span></div><input type="range" min="1" max="5" value="${profile.categoryPriorities[c]}" id="priority${c}" oninput="document.getElementById('priorityLabel${c}').textContent=priorityLabel(this.value)"></div>`).join('')}<button class="add-btn" onclick="saveCategoryPriorities()">Prioritäten speichern</button><p id="prioritySavedNote" class="saved-note"></p></div>`}
 
 async function renderHome(){try{init('home'); document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton('Arbeit')); const [events,weather,goals]=await Promise.all([loadEvents(),loadJSON(WEATHER_URL),loadJSON(GOALS_URL)]); const day=events.filter(e=>e.date===START_DATE),s=stats(events),progress=goalProgress(events,goals); document.getElementById('content').innerHTML=`<div class="hero-date">Prototyp-Tag</div><h1>${weekdayTitle(START_DATE,events)}</h1>${weatherStrip(weather)}<div class="notice">${s.suggested} KI-Zeitvorschläge · ${Math.round(s.travel)} Min. Reisezeit · Tagesenergie: ${dailyEnergy()}</div>${addEventCard('Arbeit')}<div class="quick-actions"><a class="primary-tile" href="arbeit.html"><span>💼</span><b>Arbeit</b></a><a class="primary-tile" href="freizeit.html"><span>🌿</span><b>Freizeit</b></a><a class="primary-tile" href="wochenplan.html"><span>✨</span><b>Wochenplan</b></a></div><div class="section-head"><h2>Ziele</h2><a class="small-link" href="profil.html">Bearbeiten</a></div>${goalCards(progress.slice(0,2))}<div class="section-head"><h2>Heute</h2><a class="small-link" href="wochenplan.html">Alle ansehen</a></div>${day.map(eventWithTravel).join('')}`;}catch(e){showError(e)}}
 async function renderList(kind){try{init(kind==='Arbeit'?'work':'free'); document.getElementById('app').insertAdjacentHTML('beforeend',addEventButton(kind==='Arbeit'?'Arbeit':'Gesundheit')); const events=await loadEvents(); const filtered=kind==='Arbeit'?events.filter(e=>e.group==='Arbeit'):events.filter(e=>e.group==='Freizeit'); const g=byDate(filtered),suggested=filtered.filter(e=>e.timeWasSuggested).length,travel=filtered.reduce((s,e)=>s+(e.travelBefore?.duration||0),0); document.getElementById('content').innerHTML=`<h1>${kind}</h1><p>${filtered.length} Termine aus der JSON-Datei</p><div class="notice">${suggested} KI-Zeitvorschläge · ${travel} Min. Reisezeit/Puffer</div>${addEventCard(kind==='Arbeit'?'Arbeit':'Gesundheit')}${Object.keys(g).sort().map(d=>`<div class="day-block"><div class="day-title">${weekdayTitle(d,events)}</div>${g[d].map(eventWithTravel).join('')}</div>`).join('')}`;}catch(e){showError(e)}}

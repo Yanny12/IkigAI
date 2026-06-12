@@ -40,3 +40,10 @@ GitHub Pages:
 - Blank-Screen-Risiko reduziert
 - App zeigt bei Ladefehlern eine sichtbare Fehlermeldung
 - Kategorienprioritäten und Konfliktprüfung sauber integriert
+
+
+## Neu in V1.6
+- Kategorie `Hund` entfernt
+- Bestehende Hund-Termine werden als `Freizeit` geführt
+- Konfliktwarnung zeigt Priorität des neuen und bestehenden Termins
+- IkigAI gibt eine Empfehlung anhand der Prioritäten
