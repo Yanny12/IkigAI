@@ -155,3 +155,25 @@ html,body{height:100%;overflow:hidden}
   top:-13px;
   font-size:9px;
 }
+
+/* V3.9: same calendar design, but scrollable again + clearer event cards */
+.timeline-card.fixed-day{
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+.timeline-card.fixed-day .timeline-grid.fixed-5-24{
+  height:1080px !important;
+  min-height:1080px !important;
+}
+.timeline-card.fixed-day .timeline-event{
+  background:#FFFFFF !important;
+  border:1px solid rgba(60,60,67,.20) !important;
+  border-left-width:5px !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.08) !important;
+}
+.timeline-card.fixed-day .timeline-event b{
+  color:#111 !important;
+}
+.timeline-card.fixed-day .timeline-event span{
+  color:#3A3A3C !important;
+}
