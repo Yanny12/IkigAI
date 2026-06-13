@@ -1,5 +1,7 @@
-# IkigAI V3.9
+# IkigAI V4.0
 
-- Kalender ist wieder scrollbar.
-- Kalender-Design bleibt ansonsten gleich.
-- Terminkarten haben deutlichere Ränder, weißen Hintergrund und leichten Schatten.
+- Kalender zeigt weiterhin den ganzen Tag 00:00–24:00.
+- Kalenderbereich ist scrollbar.
+- Beim Öffnen startet die Ansicht automatisch bei ca. 07:00.
+- Farblegende Arbeit/Privat ist wieder sichtbar.
+- Terminkarten zeigen die Kategorie wieder deutlich über farbigen Rand und leichte Hintergrundfarbe.
