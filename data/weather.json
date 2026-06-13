@@ -6,16 +6,16 @@
     "outdoorScore": 92
   },
   "2026-07-07": {
-    "label": "Leicht bewölkt",
+    "label": "Bewölkt",
     "temp": 22,
     "condition": "cloud",
-    "outdoorScore": 78
+    "outdoorScore": 72
   },
   "2026-07-08": {
     "label": "Regen",
     "temp": 18,
     "condition": "rain",
-    "outdoorScore": 32
+    "outdoorScore": 28
   },
   "2026-07-09": {
     "label": "Sonnig",
@@ -24,21 +24,21 @@
     "outdoorScore": 90
   },
   "2026-07-10": {
-    "label": "Gewitter möglich",
+    "label": "Gewitter",
     "temp": 21,
     "condition": "storm",
-    "outdoorScore": 24
+    "outdoorScore": 20
   },
   "2026-07-11": {
     "label": "Sonnig",
     "temp": 27,
     "condition": "sun",
-    "outdoorScore": 94
+    "outdoorScore": 95
   },
   "2026-07-12": {
-    "label": "Bewölkt",
+    "label": "Wolkig",
     "temp": 20,
     "condition": "cloud",
-    "outdoorScore": 65
+    "outdoorScore": 64
   }
 }

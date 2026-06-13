@@ -1,8 +1,6 @@
-# IkigAI V3.2 Realistic Week
+# IkigAI V3.4
 
-Neue Datenbasis:
-- realistischere Woche mit 21 Terminen statt sehr voller Demo
-- ca. 18.5h Arbeitstermine + gezielte Fokusblöcke
-- private Termine, Sport und Erholung ausgewogen verteilt
-- bewusst freie Zeit sichtbar
-- nur Kategorien Arbeit und Privat
+- Wochenplan-Tage sind klickbar und öffnen die Tagesansicht.
+- Datenbasis realistischer angepasst.
+- Joggen dauert realistische 45 Minuten.
+- Arbeitszeit: exakt 36 Stunden pro Woche.
