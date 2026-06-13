@@ -24,3 +24,22 @@
 
 .clickable-week-row{width:100%;border:0;background:transparent;font-family:inherit;cursor:pointer;text-align:left}
 .clickable-week-row:active{opacity:.55}
+
+/* V3.5 fixes */
+.floating-add{
+  right:calc(50% - 177px) !important;
+  bottom:88px !important;
+}
+.timeline-card.scrollable-day{
+  height:calc(100vh - 214px);
+  min-height:520px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.timeline-card.scrollable-day .timeline-grid.full-24h{
+  height:1440px;
+  min-height:1440px;
+}
+.timeline-card.scrollable-day .timeline-hour:after{
+  right:-300px;
+}
