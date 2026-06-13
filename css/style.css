@@ -229,3 +229,16 @@ html,body{height:100%;overflow:hidden}
   width:10px !important;
   height:10px !important;
 }
+
+
+/* V4.1 Page scroll restored */
+html, body{
+  overflow-y:auto !important;
+}
+.app{
+  min-height:100vh !important;
+  overflow:visible !important;
+}
+.page{
+  overflow-y:auto !important;
+}
