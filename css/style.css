@@ -120,3 +120,38 @@ html,body{height:100%;overflow:hidden}
 .nav{
   padding-bottom:10px;
 }
+
+/* V3.8 fixed 05:00-24:00 calendar */
+.timeline-card.fixed-day{
+  height:calc(100vh - 184px);
+  min-height:0;
+  overflow:hidden;
+  padding:7px;
+}
+.timeline-card.fixed-day .timeline-grid.fixed-5-24{
+  height:100%;
+  min-height:0;
+}
+.timeline-card.fixed-day .timeline-hour{
+  font-size:9px;
+}
+.timeline-card.fixed-day .timeline-hour:after{
+  right:-300px;
+}
+.timeline-card.fixed-day .timeline-event{
+  min-height:12px;
+  padding:2px 6px;
+  border-radius:7px;
+}
+.timeline-card.fixed-day .timeline-event b{
+  font-size:11px;
+  line-height:1.05;
+}
+.timeline-card.fixed-day .timeline-event span{
+  font-size:9px;
+  line-height:1.05;
+}
+.timeline-card.fixed-day .now-line span{
+  top:-13px;
+  font-size:9px;
+}
