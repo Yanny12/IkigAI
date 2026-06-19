@@ -34,3 +34,11 @@ GitHub Pages:
 - Arbeitsstunden pro Woche
 - Auswahl der Arbeitstage
 - Speicherung im Browser via `localStorage`
+
+
+## Neu in V1.5
+- Kategorien im Profil priorisieren
+- Prioritäten beeinflussen KI-Zeitvorschläge
+- Konfliktprüfung beim Erfassen neuer Termine
+- Warnung bei Überschneidungen
+- Optionen: Zeit anpassen oder trotzdem speichern
