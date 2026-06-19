@@ -1,32 +1,63 @@
 [
   {
-    "id": "g1",
-    "title": "2 kg abnehmen",
-    "category": "Privat",
-    "startDate": "2026-07-01",
-    "targetDate": "2026-08-01",
-    "current": 0.6,
-    "target": 2,
-    "unit": "kg"
+    "id": "weight",
+    "title": "5 kg abnehmen",
+    "target": 5,
+    "unit": "Aktivitäten/Woche",
+    "categories": [
+      "Gesundheit"
+    ],
+    "keywords": [
+      "joggen",
+      "padel",
+      "sport",
+      "fitness",
+      "training"
+    ]
   },
   {
-    "id": "g2",
-    "title": "3x pro Woche Sport",
-    "category": "Privat",
-    "startDate": "2026-07-06",
-    "targetDate": "2026-07-12",
-    "current": 2,
+    "id": "stress",
+    "title": "Stress reduzieren",
+    "target": 4,
+    "unit": "Ruheblöcke/Woche",
+    "categories": [
+      "Freiraum"
+    ],
+    "keywords": [
+      "pause",
+      "ruhe",
+      "freiraum",
+      "spaziergang"
+    ]
+  },
+  {
+    "id": "family",
+    "title": "Mehr Zeit mit Familie & Freunden",
     "target": 3,
-    "unit": "Einheiten"
+    "unit": "soziale Termine/Woche",
+    "categories": [
+      "Sozial"
+    ],
+    "keywords": [
+      "familie",
+      "freunde",
+      "essen",
+      "sozial"
+    ]
   },
   {
-    "id": "g3",
-    "title": "20 Stunden Fokusarbeit",
-    "category": "Arbeit",
-    "startDate": "2026-07-06",
-    "targetDate": "2026-07-12",
-    "current": 7,
+    "id": "revenue",
+    "title": "Umsatz steigern",
     "target": 20,
-    "unit": "Stunden"
+    "unit": "Arbeitsstunden/Woche",
+    "categories": [
+      "Arbeit"
+    ],
+    "keywords": [
+      "kunden",
+      "fokus",
+      "meeting",
+      "arbeit"
+    ]
   }
 ]
