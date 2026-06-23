@@ -25,3 +25,18 @@ GitHub Pages:
 ## Fix in V1.3.1
 - Der Button `Neuer Termin` ist jetzt zusätzlich als große blaue Karte direkt im Inhalt sichtbar.
 - Der Floating Button wurde nach rechts unten fixiert.
+
+
+## Neu in V1.4
+- Profilseite mit persönlichen Angaben
+- Vorname, Nachname, Email, Telefonnummer, Alter, Geschlecht
+- Private Adresse und Geschäftsadresse
+- Arbeitsstunden pro Woche
+- Auswahl der Arbeitstage
+- Speicherung im Browser via `localStorage`
+
+
+## Fix in V1.5.1
+- Blank-Screen-Risiko reduziert
+- App zeigt bei Ladefehlern eine sichtbare Fehlermeldung
+- Kategorienprioritäten und Konfliktprüfung sauber integriert
